@@ -1,5 +1,5 @@
 from Bio import SeqIO
-import itertools as it
+from Bio import SeqFeature
 from feature import *
 
 def getFeature(features_to_check):
@@ -10,6 +10,10 @@ def getFeature(features_to_check):
             if f.type in features_to_check:
                 yield Feature(first_record.seq[f.location.start:f.location.end], f.type,  0)
 
+record_iterator = SeqIO.parse("vectors-100.gb", "genbank")
+first_record = next(record_iterator)
+for f in first_record.features:
+    features.append(Feature(first_record.seq[f.location.start:f.location.end], f.type))
 
 def countFeatures(features, countList, features_to_check):
     for feature in features:
