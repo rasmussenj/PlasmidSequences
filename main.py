@@ -11,13 +11,16 @@ if __name__ == "__main__":
     product = ['tRNA', 'rRNA']
     print list(getFeature(only_note))
     features_count = []
-    featureSta = countFeatures(getFeature(only_note),features_count, only_note)
+    feature_container = countFeatures(getFeature(only_note),features_count, only_note)
+    feature_container = Statistic(feature_container).featureContainer
 
-    for f in featureSta:
-        print(f.name)
-        for variation_f in f.varationList:
-            print(variation_f.count)
-            print(variation_f.seq)
-            print("---------------------------------------------")
+    ## nach dem Statistic ausgefuehrt wurde, beinhaltet der container nur noch
+    #  features die oeffter als 10% vorkommen und mind. 3 mal vorkommen
 
-        print("***********************new Feature********************************")
+
+    print ("\n\n\n\n\nnur zum zeigen wie ihr zugreiffen koennt\n\n\n\n\n")
+    for feature in feature_container:
+        print(feature.name)
+        # jedes feature kann verschiedene variationen haben
+        for variation_f in feature.varationList:
+            print("| %-10d %10d%% %-10s "% (variation_f.count,  variation_f.present_in_percent, variation_f.seq))

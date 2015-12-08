@@ -26,5 +26,4 @@ def countFeatures(features, countList, features_to_check):
             if not seq_in_list:
                 count_f.varationList.append(FeatureStat.Types(feature.seq,1))
 
-
     return countList
