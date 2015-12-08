@@ -4,7 +4,7 @@ from feature import *
 
 def getFeature(features_to_check):
     record_iterator = SeqIO.parse("vectors-100.gb", "genbank")
-    for i in range(0, 50):
+    for i in range(0,100000):
         first_record = next(record_iterator)
         for f in first_record.features:
             if f.type in features_to_check:
