@@ -8,7 +8,7 @@ class Feature:
         self.seq = seq
 
     def getSeq(self):
-        return self.name
+        return self.seq
 
     def addOne(self):
         self.count =+1
