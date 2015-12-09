@@ -17,6 +17,10 @@ class Feature:
         self.seq = seq
         self.count = count
         self.name = name
+        self.product = None
+        self.gene = None
+        self.bound_moiety = None
+        self.mobile = None
 
 
 
