@@ -3,12 +3,11 @@ import itertools as it
 from feature import *
 
 def getFeature(features_to_check):
-    record_iterator = SeqIO.parse("vectors-100.gb", "genbank")
-    for i in range(0,100000):
-        first_record = next(record_iterator)
-        for f in first_record.features:
+    handle = open("vectors-100.gb", "rU")
+    for record in SeqIO.parse(handle, "genbank") :
+        for f in record.features:
             if f.type in features_to_check:
-                yield Feature(first_record.seq[f.location.start:f.location.end], f.type,  0)
+                yield Feature(record.seq[f.location.start:f.location.end], f.type,  0)
 
 
 def countFeatures(features, countList, features_to_check):

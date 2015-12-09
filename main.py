@@ -9,7 +9,7 @@ if __name__ == "__main__":
     note_and_mobile = ['mobile_element']
     gene = ['mRNA']
     product = ['tRNA', 'rRNA']
-    print list(getFeature(only_note))
+#    print list(getFeature(only_note))
     features_count = []
     feature_container = countFeatures(getFeature(only_note),features_count, only_note)
     feature_container = Statistic(feature_container).featureContainer
