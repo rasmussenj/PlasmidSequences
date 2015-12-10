@@ -27,6 +27,7 @@ if __name__ == "__main__":
 
 record = SeqIO.read("Ecolik12.gb", "genbank")
 strRecord = str(record.seq)
+matchStartPosition = []
 
 for feature in feature_container:
     for variation_f in feature.varationList:
@@ -34,8 +35,20 @@ for feature in feature_container:
         featureSeq = str(variation_f.seq)
         if featureSeq != "G":
 
-            matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
-            print(feature.name)
-            print textwrap.fill("Matching at position: " + matchStartPosition + "...", 100)
+            matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq)).split(", ")
 
+            if len(matchStartPosition) > 1:
 
+                print(feature.name)
+
+                for i in range(1, len(matchStartPosition)):
+                    if i == len(matchStartPosition)-1:
+                        start = int(matchStartPosition[i][:-1])+1
+                        end = int(matchStartPosition[i][:-1])+len(featureSeq)
+                    else:
+                        start = int(matchStartPosition[i])+1
+                        end = int(matchStartPosition[i])+len(featureSeq)
+                        print ("Matching at position: " + str(start) + "..." + str(end))
+
+            else:
+                print("%-20s %-20s"% (feature.name, "No Matches"))
