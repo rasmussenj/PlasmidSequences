@@ -1,4 +1,8 @@
+import textwrap
+
 from load import *
+from Bio import SeqIO
+from Bio import SeqUtils
 
 
 if __name__ == "__main__":
@@ -18,3 +22,17 @@ if __name__ == "__main__":
         # jedes feature kann verschiedene variationen haben
         for variation_f in feature.varationList:
             print("| %-10d %10d%% %-10s "% (variation_f.count,  variation_f.present_in_percent, variation_f.seq))
+
+
+
+record = SeqIO.read("Ecolik12.gb", "genbank")
+strRecord = str(record.seq)
+
+for feature in feature_container:
+    print(feature.name)
+    featureSeq = str(feature.seq)
+
+    matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
+    matchEndPosition = str(SeqUtils.nt_search(strRecord, featureSeq) + len(featureSeq))
+
+    print ("Matching at position: " + matchStartPosition + "..." + matchEndPosition)
