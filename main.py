@@ -31,7 +31,8 @@ strRecord = str(record.seq)
 for feature in feature_container:
     print(feature.name)
     featureSeq = str(feature.seq)
-    startPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
-    endPosition = str(SeqUtils.nt_search(strRecord, featureSeq) + len(featureSeq))
 
-    print ("Matching at position: " + startPosition + "..." + endPosition)
+    matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
+    matchEndPosition = str(SeqUtils.nt_search(strRecord, featureSeq) + len(featureSeq))
+
+    print ("Matching at position: " + matchStartPosition + "..." + matchEndPosition)
