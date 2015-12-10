@@ -15,36 +15,47 @@ def getFeature():
         for f in record.features:
 
             if f.type in only_note:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.note = f.qualifiers.get('note')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.note = f.qualifiers.get('note')
+                    yield feature
             if f.type in note_and_gene:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.gene = f.qualifiers.get('gene')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.gene = f.qualifiers.get('gene')
+                    yield feature
             if f.type in gene_and_product:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.product = f.qualifiers.get('product')
-                feature.gene = f.qualifiers.get('gene')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.product = f.qualifiers.get('product')
+                    feature.gene = f.qualifiers.get('gene')
+                    yield feature
             if f.type in note_and_bound_moiety:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.product = f.qualifiers.get('bound_moiety')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.product = f.qualifiers.get('bound_moiety')
+                    yield feature
             if f.type in note_and_mobile:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.product = f.qualifiers.get('moble_element')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.product = f.qualifiers.get('moble_element')
+                    yield feature
             if f.type in gene:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.gene = f.qualifiers.get('gene')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.gene = f.qualifiers.get('gene')
+                    yield feature
             if f.type in product:
-                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                feature.product = f.qualifiers.get('product')
-                yield feature
+                if (testFeature(f.location.start,f.location.end) == 1):
+                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                    feature.product = f.qualifiers.get('product')
+                    yield feature
 
-
+def testFeature(start, end):
+    if (start +3 > end):
+        return 0
+    else:
+        return 1
 
 def countFeatures(features, countList):
     for feature in features:
