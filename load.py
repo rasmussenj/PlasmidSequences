@@ -10,7 +10,7 @@ gene = ['mRNA']
 product = ['tRNA', 'rRNA']
 
 def getFeature():
-    handle = open("vectors-100.gb", "rU")
+    handle = open("vectors.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         for f in record.features:
 
@@ -52,7 +52,7 @@ def getFeature():
                     yield feature
 
 def testFeature(start, end):
-    if (start +3 > end):
+    if (start + 10 > end):
         return 0
     else:
         return 1

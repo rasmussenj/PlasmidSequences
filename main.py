@@ -1,5 +1,3 @@
-import textwrap
-
 from load import *
 from Bio import SeqIO
 from Bio import SeqUtils
@@ -25,15 +23,21 @@ if __name__ == "__main__":
 
 
 
-record = SeqIO.read("Ecolik12.gb", "genbank")
+record = SeqIO.read("EcoliK12.gb", "genbank")
 strRecord = str(record.seq)
+print strRecord[0:10]
 
 for feature in feature_container:
     for variation_f in feature.varationList:
 
         featureSeq = str(variation_f.seq)
-        matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
-        print(feature.name)
-        print textwrap.fill("Matching at position: " + matchStartPosition + "...", 100)
+        occurrence = SeqUtils.nt_search(strRecord, featureSeq)
+        if (len(occurrence) > 1):
+            print featureSeq[0:10]
+            print(feature.name)
+            print "it occur ", (len(occurrence)-1), "times on the forward strand"
+
+        # for i in range(1,len(occurrence)-1):
+        #     print "From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
 
 
