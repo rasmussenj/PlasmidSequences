@@ -36,6 +36,6 @@ for feature in feature_container:
 
             matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq))
             print(feature.name)
-            print ("Matching at position: " + matchStartPosition + "..." + str(len(variation_f.seq)))
+            print ("Matching at position: " + matchStartPosition + "...")
 
 
