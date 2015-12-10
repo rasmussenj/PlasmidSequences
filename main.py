@@ -39,8 +39,6 @@ for feature in feature_container:
 
             if len(matchStartPosition) > 1:
 
-                print(feature.name)
-
                 for i in range(1, len(matchStartPosition)):
                     if i == len(matchStartPosition)-1:
                         start = int(matchStartPosition[i][:-1])+1
@@ -48,7 +46,7 @@ for feature in feature_container:
                     else:
                         start = int(matchStartPosition[i])+1
                         end = int(matchStartPosition[i])+len(featureSeq)
-                        print ("Matching at position: " + str(start) + "..." + str(end))
+                        print (feature.name + " Matching at position: " + str(start) + "..." + str(end))
 
             else:
                 print("%-20s %-20s"% (feature.name, "No Matches"))
