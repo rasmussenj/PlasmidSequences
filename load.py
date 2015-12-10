@@ -12,8 +12,11 @@ def getFeature(features_to_check):
     handle = open("vectors-100.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         for f in record.features:
+
             if f.type in features_to_check:
-                yield Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                feature.note = f.qualifiers.get('note')
+                yield feature
             if f.type in note_and_gene:
                 feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                 feature.gene = f.qualifiers.get('gene')
@@ -55,6 +58,9 @@ def countFeatures(features, countList, features_to_check):
                 seq_in_list = True
 
             if not seq_in_list:
-                count_f.varationList.append(FeatureStat.Types(feature.seq,1))
+                newVariation = FeatureStat.Types(feature.seq,1)
+                newVariation.note = feature.note
+                count_f.varationList.append(newVariation)
+
 
     return countList

@@ -11,6 +11,8 @@ class FeatureStat:
             self.seq = seq
             self.count = count
             self.present_in_percent = None
+            self.product = None
+            self.note = None
 
 class Feature:
     def __init__(self, seq, name, count):
@@ -32,6 +34,7 @@ class Statistic:
         self.removeSpuriousCommonFeatures()
         self.removeSpuriousAnnotations()
         self.showStaistic()
+
     def removeSpuriousCommonFeatures(self):
         tempFeatureContainer =[]
 
@@ -67,7 +70,7 @@ class Statistic:
         for f in self.featureContainer:
             print("+---------------------------------------------------------")
             print("| %s " % f.name)
-            print("| %-20s %-20s"% ("count", "seq Start"))
+            print("| %-20s %-20s %10s %14s "% ("count", "seq Start","percent", "product"))
 
             for variation_f in f.varationList:
-                print("| %-20d %-20s %10d %%"% (variation_f.count, variation_f.seq[:10], variation_f.present_in_percent))
+                print("|%-20d %-20s %10d %% %10s"% (variation_f.count, variation_f.seq[:10], variation_f.present_in_percent, variation_f.note))
