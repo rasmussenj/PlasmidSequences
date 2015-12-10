@@ -62,6 +62,10 @@ def countFeatures(features, countList):
             if not seq_in_list:
                 newVariation = FeatureStat.Types(feature.seq,1)
                 newVariation.note = feature.note
+                newVariation.mobile = feature.mobile
+                newVariation.bound_moiety = feature.bound_moiety
+                newVariation.gene = feature.gene
+                newVariation.product = feature.product
                 count_f.varationList.append(newVariation)
 
 

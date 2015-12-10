@@ -12,6 +12,9 @@ class FeatureStat:
             self.count = count
             self.present_in_percent = None
             self.product = None
+            self.gene = None
+            self.bound_moiety = None
+            self.mobile = None
             self.note = None
 
 class Feature:
@@ -71,10 +74,10 @@ class Statistic:
         for f in self.featureContainer:
             print("+---------------------------------------------------------")
             print("| %s " % f.name)
-            print("| %-20s %-20s %10s %14s "% ("count", "seq Start","percent", "note"))
+            print("| %-20s %-20s %10s %50s %50s %50s"% ("count", "seq Start","percent", "note", "Gene", "Product"))
 
             for variation_f in f.varationList:
 
-                print("|%-20d %-20s %10d %% %10s"% (variation_f.count, variation_f.seq[:10],
+                print("|%-20d %-20s %10d %% %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
                                                     variation_f.present_in_percent,
-                                                    [x for x in variation_f.note ]))
+                                                    variation_f.note, variation_f.gene, variation_f.product))
