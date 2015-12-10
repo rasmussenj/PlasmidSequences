@@ -1,19 +1,20 @@
 from Bio import SeqIO
 import itertools as it
 from feature import *
+only_note = ['promoter', 'oriT', 'rep_origin', 'primer_bind', 'terminator', 'misc_signal', 'misc_recomb', 'LTR', 'enhancer']
+note_and_gene = ['-35_signal', '-10_signal', 'RBS', 'polyA_signal', 'sig_peptide']
+gene_and_product = ['CDS']
+note_and_bound_moiety = ['protein_bind', 'misc_binding']
+note_and_mobile = ['mobile_element']
+gene = ['mRNA']
+product = ['tRNA', 'rRNA']
 
-def getFeature(features_to_check):
-    note_and_gene = ['-35_signal', '-10_signal', 'RBS', 'polyA_signal', 'sig_peptide']
-    gene_and_product = ['CDS']
-    note_and_bound_moiety = ['protein_bind', 'misc_binding']
-    note_and_mobile = ['mobile_element']
-    gene = ['mRNA']
-    product = ['tRNA', 'rRNA']
+def getFeature():
     handle = open("vectors-100.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         for f in record.features:
 
-            if f.type in features_to_check:
+            if f.type in only_note:
                 feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                 feature.note = f.qualifiers.get('note')
                 yield feature
@@ -45,11 +46,12 @@ def getFeature(features_to_check):
 
 
 
-def countFeatures(features, countList, features_to_check):
+def countFeatures(features, countList):
     for feature in features:
         if len(countList) == 0:
-            for f in features_to_check:
-                countList.append(FeatureStat(f))
+            for q in [only_note, note_and_gene, gene_and_product, note_and_bound_moiety, note_and_mobile, gene, product]:
+                for f in q:
+                    countList.append(FeatureStat(f))
 
         for count_f in it.ifilter(lambda f: f.name == feature.name, countList):
             seq_in_list = False

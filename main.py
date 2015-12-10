@@ -2,10 +2,10 @@ from load import *
 
 
 if __name__ == "__main__":
-    only_note = ['promoter', 'oriT', 'rep_origin', 'primer_bind', 'terminator', 'misc_signal', 'misc_recomb', 'LTR', 'enhancer']
+
 #    print list(getFeature(only_note))
     features_count = []
-    feature_container = countFeatures(getFeature(only_note),features_count, only_note)
+    feature_container = countFeatures(getFeature(),features_count)
     feature_container = Statistic(feature_container).featureContainer
 
     ## nach dem Statistic ausgefuehrt wurde, beinhaltet der container nur noch
