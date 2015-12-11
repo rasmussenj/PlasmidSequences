@@ -39,22 +39,7 @@ for feature in feature_container:
             print(feature.name)
             print "it occur ", (len(occurrence)-1), "times on the forward strand"
 
-        # for i in range(1,len(occurrence)-1):
-        #     print "From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
+            # for i in range(1,len(occurrence)-1):
+            #      print "From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
 
-            matchStartPosition = str(SeqUtils.nt_search(strRecord, featureSeq)).split(", ")
-
-            if len(matchStartPosition) > 1:
-
-                for i in range(1, len(matchStartPosition)):
-                    if i == len(matchStartPosition)-1:
-                        start = int(matchStartPosition[i][:-1])+1
-                        end = int(matchStartPosition[i][:-1])+len(featureSeq)
-                    else:
-                        start = int(matchStartPosition[i])+1
-                        end = int(matchStartPosition[i])+len(featureSeq)
-                        print (feature.name + " Matching at position: " + str(start) + "..." + str(end))
-
-            else:
-                print("%-20s %-20s"% (feature.name, "No Matches"))
 

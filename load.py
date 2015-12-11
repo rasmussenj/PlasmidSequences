@@ -52,7 +52,7 @@ def getFeature():
                     yield feature
 
 def testFeature(start, end):
-    if (start + 10 > end):
+    if (start + 2 > end):
         return 0
     else:
         return 1
