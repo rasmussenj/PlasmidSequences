@@ -33,13 +33,25 @@ for feature in feature_container:
     for variation_f in feature.varationList:
 
         featureSeq = str(variation_f.seq)
+        featureSeqComplement = str(variation_f.seq.complement())
+
         occurrence = SeqUtils.nt_search(strRecord, featureSeq)
+        occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
+
         if (len(occurrence) > 1):
             print featureSeq[0:10]
             print(feature.name)
             print "it occur ", (len(occurrence)-1), "times on the forward strand"
 
+        if (len(occurrenceComplement) > 1):
+            print featureSeqComplement[0:10]
+            print(feature.name)
+            print "it occur ", (len(occurrenceComplement)-1), "times on the complement strand"
+
             # for i in range(1,len(occurrence)-1):
             #      print "From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
+
+            # for i in range(1, len(occurrenceComplement)-1):
+            #      print "From:", occurrenceComplement[i], "To:", (occurrenceComplement[i]+len(featureSeqComplement))
 
 
