@@ -39,19 +39,19 @@ for feature in feature_container:
         occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
 
         if (len(occurrence) > 1):
-            print featureSeq[0:10]
-            print(feature.name)
-            print "it occur ", (len(occurrence)-1), "times on the forward strand"
+            # print featureSeq[0:10]
+            # print(feature.name)
+            # print "it occur ", (len(occurrence)-1), "times on the forward strand"
+
+            for i in range(1,len(occurrence)-1):
+                 print str(feature.name) + ": From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
 
         if (len(occurrenceComplement) > 1):
-            print featureSeqComplement[0:10]
-            print(feature.name)
-            print "it occur ", (len(occurrenceComplement)-1), "times on the complement strand"
+            # print featureSeqComplement[0:10]
+            # print(feature.name)
+            # print "it occur ", (len(occurrenceComplement)-1), "times on the complement strand"
 
-            # for i in range(1,len(occurrence)-1):
-            #      print "From:", occurrence[i], "To:", (occurrence[i]+len(featureSeq))
-
-            # for i in range(1, len(occurrenceComplement)-1):
-            #      print "From:", occurrenceComplement[i], "To:", (occurrenceComplement[i]+len(featureSeqComplement))
+            for i in range(1, len(occurrenceComplement)-1):
+                 print str(feature.name) + " In complement From:", occurrenceComplement[i], "To:", (occurrenceComplement[i]+len(featureSeqComplement))
 
 

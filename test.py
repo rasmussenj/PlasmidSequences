@@ -33,3 +33,6 @@ def searchPrimerBindingSites(records, primerBindingSites):
 
 
 searchPrimerBindingSites(records, primerBindingSites)
+
+
+## if len > 15 partly match
