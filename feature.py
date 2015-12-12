@@ -1,7 +1,7 @@
 import math
 
 
-class FeatureStat:
+class FeatureStatistic:
     def __init__(self, name):
         self.varationList = []
         self.name = name
@@ -71,6 +71,8 @@ class Statistic:
 
 
     def showStaistic(self):
+        log_file = open("log.txt", mode='w')
+
         for f in self.featureContainer:
             print("+---------------------------------------------------------")
             print("| %s " % f.name)
@@ -81,3 +83,16 @@ class Statistic:
                 print("|%-20d %-20s %10d %% %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
                                                     variation_f.present_in_percent,
                                                     variation_f.note, variation_f.gene, variation_f.product))
+
+        for f in self.featureContainer:
+            log_file.write("+---------------------------------------------------------")
+            log_file.write("| %s " % f.name)
+            log_file.write("| %-20s %-20s %10s %50s %50s %50s"% ("count", "seq Start","percent", "note", "Gene", "Product"))
+
+            for variation_f in f.varationList:
+
+                log_file.write("|%-20d %-20s %10d %% %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
+                                                              variation_f.present_in_percent,
+                                                              variation_f.note, variation_f.gene, variation_f.product))
+
+        log_file.close()

@@ -9,75 +9,82 @@ note_and_mobile = ['mobile_element']
 gene = ['mRNA']
 product = ['tRNA', 'rRNA']
 
+features_to_check_list = [only_note, note_and_gene, gene_and_product, note_and_bound_moiety, note_and_mobile, gene, product]
+
 def getFeature():
     handle = open("vectors.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         for f in record.features:
 
             if f.type in only_note:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.note = f.qualifiers.get('note')
                     yield feature
             if f.type in note_and_gene:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.gene = f.qualifiers.get('gene')
                     yield feature
             if f.type in gene_and_product:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.product = f.qualifiers.get('product')
                     feature.gene = f.qualifiers.get('gene')
                     yield feature
             if f.type in note_and_bound_moiety:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.product = f.qualifiers.get('bound_moiety')
                     yield feature
             if f.type in note_and_mobile:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.product = f.qualifiers.get('moble_element')
                     yield feature
             if f.type in gene:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.gene = f.qualifiers.get('gene')
                     yield feature
             if f.type in product:
-                if (testFeature(f.location.start,f.location.end) == 1):
+                if (testSeqLength(f.location.start,f.location.end) == 1):
                     feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                     feature.product = f.qualifiers.get('product')
                     yield feature
 
-def testFeature(start, end):
+def testSeqLength(start, end):
     if (start + 2 > end):
         return 0
     else:
         return 1
 
-def countFeatures(features, countList):
+def countFeatures(features):
+    features_Container = []
     for feature in features:
-        if len(countList) == 0:
-            for q in [only_note, note_and_gene, gene_and_product, note_and_bound_moiety, note_and_mobile, gene, product]:
-                for f in q:
-                    countList.append(FeatureStat(f))
+        # fill the features_Container with all features as FeatureStatistic object
+        if len(features_Container) == 0:
+            for features_to_check in features_to_check_list:
+                for f in features_to_check:
+                    features_Container.append(FeatureStatistic(f))
 
-        for count_f in it.ifilter(lambda f: f.name == feature.name, countList):
+        # get the FeatureStatistic object which corresponds with the actual feature
+        for statFeature in it.ifilter(lambda f: f.name == feature.name, features_Container):
             seq_in_list = False
-            for variation in it.ifilter(lambda f: f.seq == feature.seq, count_f.varationList):
+
+            # search for the corresponding seq in statFeature
+            for variation in it.ifilter(lambda f: f.seq == feature.seq, statFeature.varationList):
                 variation.count += 1
                 seq_in_list = True
 
+            # if seq not found in statFeature, create a new variation of the feature
             if not seq_in_list:
-                newVariation = FeatureStat.Types(feature.seq,1)
-                newVariation.note = feature.note
-                newVariation.mobile = feature.mobile
-                newVariation.bound_moiety = feature.bound_moiety
-                newVariation.gene = feature.gene
-                newVariation.product = feature.product
-                count_f.varationList.append(newVariation)
+                new_variation = FeatureStatistic.Types(feature.seq,1)
+                new_variation.note = feature.note
+                new_variation.mobile = feature.mobile
+                new_variation.bound_moiety = feature.bound_moiety
+                new_variation.gene = feature.gene
+                new_variation.product = feature.product
+                statFeature.varationList.append(new_variation)
 
-
-    return countList
+    return features_Container

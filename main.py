@@ -11,8 +11,7 @@ from Bio.SeqFeature import SeqFeature
 if __name__ == "__main__":
 
 #    print list(getFeature(only_note))
-    features_count = []
-    feature_container = countFeatures(getFeature(),features_count)
+    feature_container = countFeatures(getFeature())
     feature_container = Statistic(feature_container).featureContainer
 
     record = SeqIO.read("EcoliK12.gb", "genbank")
