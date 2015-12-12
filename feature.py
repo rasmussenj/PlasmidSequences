@@ -1,12 +1,12 @@
 import math
 
 
-class FeatureStat:
+class FeatureStatistic:
     def __init__(self, name):
         self.varationList = []
         self.name = name
 
-    class Types:
+    class Varation:
         def __init__(self, seq, count):
             self.seq = seq
             self.count = count
@@ -66,7 +66,7 @@ class Statistic:
                 if (f_var.present_in_percent > 10):
                     tempVariationList.append(f_var)
 
-            feature.varationList = sorted(tempVariationList, key=lambda var: var.count)
+            feature.varationList = sorted(tempVariationList, key=lambda var: var.count, reverse=True)
 
 
 
@@ -77,7 +77,24 @@ class Statistic:
             print("| %-20s %-20s %10s %50s %50s %50s"% ("count", "seq Start","percent", "note", "Gene", "Product"))
 
             for variation_f in f.varationList:
-
                 print("|%-20d %-20s %10d %% %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
                                                     variation_f.present_in_percent,
                                                     variation_f.note, variation_f.gene, variation_f.product))
+
+        log_file = open("Log_Features_in_vector.txt", mode='w')
+        log_file.write(" %s \t %s \t %s \t %s  \t %s \t %s \t %s \n"% ("feature", "count", "seq Start","percent", "note", "Gene", "Product"))
+        for f in self.featureContainer:
+
+            log_file.write("\n\n %s \n" % f.name)
+            for variation_f in f.varationList:
+
+                log_file.write("%s \t  %s \t %d %% \t %s \t %s \t %s \t %s \n"% (
+                    " ",
+                    variation_f.count,
+                    variation_f.present_in_percent,
+                    variation_f.note,
+                    variation_f.gene,
+                    variation_f.product,
+                    variation_f.seq))
+
+        log_file.close()
