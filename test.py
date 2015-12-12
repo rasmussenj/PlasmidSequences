@@ -1,38 +1,27 @@
 from Bio import SeqIO
-from feature import *
+from Bio.SeqUtils import six_frame_translations
 
 ## Read in the fucking files..
 records = list(SeqIO.parse("vectors.gb", "genbank"))
 primerBindingSites = list(SeqIO.parse("common_primer.mfasta", "fasta"))
 specialTranslatedFeatures = list(SeqIO.parse("tags_epitopes.mfasta", "fasta"))
 
-def searchPrimerBindingSites(records, primerBindingSites):
-    for i in range (730, 780):
-        recordsSeqToCheckFiveEnd = str(records[i].seq)[0:14]
-        recordsSeqToCheckThreeEnd = (str(records[i].seq)[::-1])[0:14]
+for i in range(len(records)):
+    seqRecordToCheck = str(records[i].seq)
+    seqRecordToCheckComplement = str(records[i].seq.complement())
 
-        complementRecordsSeqToCheckFiveEnd = str(records[i].seq.complement())[0:14]
-        complementRecordsSeqToCheckThreeEnd = (str(records[i].seq.complement())[::-1])[0:14]
+    for seq in primerBindingSites:
+        primerSeq = str(seq.seq[::-1])
+        length = len(seq.seq)
 
-        for x in range (0, len(primerBindingSites)):
-            if recordsSeqToCheckFiveEnd == str(primerBindingSites[x].seq)[0:14]:
-                print "Primer Binding Sites: Match at five' end"
-                print ("Record ID: " + records[i].id)
+        if seqRecordToCheck[0:14] == primerSeq[0:14]:
+            if seqRecordToCheck[0:length-1] == primerSeq:
+                print "Record ID: " + records[i].id + " Primer Binding Sites: (complete) Match. " + "Primer ID: " + seq.id
+            else:
+                print "Record ID: " + records[i].id + " Primer Binding Sites: (partaial) Match. " + "Primer ID: " + seq.id
 
-            if recordsSeqToCheckThreeEnd == str(primerBindingSites[x].seq)[0:14]:
-                print "Primer Binding Sites: Match at three' end"
-                print ("Record ID: " + records[i].id)
-
-            if complementRecordsSeqToCheckFiveEnd == str(primerBindingSites[x].seq)[0:14]:
-                print "Primer Binding Sites: Match at COMPLEMENT five' end"
-                print ("Record ID: " + records[i].id)
-
-            if complementRecordsSeqToCheckThreeEnd == str(primerBindingSites[x].seq)[0:14]:
-                print "Primer Binding Sites: Match at COMPLEMENT TREE' end"
-                print ("Record ID: " + records[i].id)
-
-
-searchPrimerBindingSites(records, primerBindingSites)
-
-
-## if len > 15 partly match
+        if seqRecordToCheckComplement[0:14] == primerSeq[0:14]:
+            if seqRecordToCheckComplement[0:length-1] == primerSeq:
+                print "Record ID: " + records[i].id + " Primer Binding Sites: (complete) Match at complement. " + "Primer ID: " + seq.id
+            else:
+                print "Record ID: " + records[i].id + " Primer Binding Sites: (partaial) Match at complement. " + "Primer ID: " + seq.id
