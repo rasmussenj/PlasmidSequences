@@ -11,8 +11,8 @@ from Bio.SeqFeature import SeqFeature
 if __name__ == "__main__":
 
 #    print list(getFeature(only_note))
-    feature_container = countFeatures(getFeature())
-    feature_container = Statistic(feature_container).featureContainer
+    featureStatistic_container = countFeatures(getFeature())
+    featureStatistic_container = Statistic(featureStatistic_container).featureContainer
 
     record = SeqIO.read("EcoliK12.gb", "genbank")
     newRecord = SeqRecord(record.seq)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     strRecord = str(record.seq)
 
-    for feature in feature_container:
+    for feature in featureStatistic_container:
         for variation_f in feature.varationList:
 
             featureSeq = str(variation_f.seq)

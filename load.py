@@ -79,7 +79,7 @@ def countFeatures(features):
 
             # if seq not found in statFeature, create a new variation of the feature
             if not seq_in_list:
-                new_variation = FeatureStatistic.Types(feature.seq,1)
+                new_variation = FeatureStatistic.Varation(feature.seq,1)
                 new_variation.note = feature.note
                 new_variation.mobile = feature.mobile
                 new_variation.bound_moiety = feature.bound_moiety
