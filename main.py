@@ -18,10 +18,6 @@ if __name__ == "__main__":
     newRecord.id=record.id
     newRecord.name = record.name
     newRecord.description = record.description
-    # newRecord.keywords = record.keywords
-    # newRecord.source = record.source
-    # newRecord.organism = record.organism
-    # newRecord.authors = record.authors
 
     strRecord = str(record.seq)
 
@@ -51,7 +47,6 @@ if __name__ == "__main__":
             featureSeqReverse = str(variation_f.seq.reverse_complement)
             occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
             if (len(occurrenceComplement) > 1):
-                print occurrenceComplement
                 for i in range(1, len(occurrenceComplement)-1):
                     newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature.name))
                     if variation_f.product != None:

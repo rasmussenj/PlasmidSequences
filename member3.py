@@ -6,7 +6,7 @@ primerBindingSites = list(SeqIO.parse("common_primer.mfasta", "fasta"))
 specialTranslatedFeatures = list(SeqIO.parse("tags_epitopes.mfasta", "fasta"))
 
 
-for x in range(500, 550):
+for x in range(450, 500):
     seqRecordToCheck = str(records[x].seq)
     seqRecordToCheckComplement = str(records[x].seq.complement())
 
@@ -22,7 +22,6 @@ for x in range(500, 550):
         if (len(matchingPrimerPositions) > 1):
             length = len(matchingPrimerPositions)
             for j in range(1, length):
-
                 if primerSeq == seqRecordToCheck[matchingPrimerPositions[j] : matchingPrimerPositions[j] + len(primerSeq)]:
                     print "Complete Match at position: " + str(matchingPrimerPositions[j]) + ".." + str(matchingPrimerPositions[j] + len(primerSeq)) + " in record: " + str(records[x].id)
                 else:
@@ -34,7 +33,6 @@ for x in range(500, 550):
         if (len(matchingPrimerPositions) > 1):
             length = len(matchingPrimerPositions)
             for j in range(1, length):
-
                 if primerSeq == seqRecordToCheckComplement[matchingPrimerPositions[j] : matchingPrimerPositions[j] + len(primerSeq)]:
                     print "Complete Match on COMPLEMENT at position: " + str(matchingPrimerPositions[j]) + ".." + str(matchingPrimerPositions[j] + len(primerSeq)) + " in record: " + str(records[x].id)
                 else:
