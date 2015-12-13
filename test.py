@@ -29,7 +29,7 @@ for x in range(500, 550):
                 else:
                     print "Partial Match at position: " + str(matchingPrimerPositions[j]) + ".." + str(matchingPrimerPositions[j] + len(partialPrimerSeq)) + " in record: " + str(records[x].id)
 
-fehler
+
         if (len(matchingPrimerPositions) > 1):
             length = len(matchingPrimerPositions)
             for j in range(1, length):
