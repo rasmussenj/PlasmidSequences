@@ -1,5 +1,3 @@
-import textwrap
-
 from load import *
 from Bio import SeqIO
 from Bio import SeqUtils
@@ -9,8 +7,6 @@ from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import SeqFeature
 
 if __name__ == "__main__":
-
-#    print list(getFeature(only_note))
     featureStatistic_container = countFeatures(getFeature())
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
 
@@ -52,32 +48,24 @@ if __name__ == "__main__":
                         newFeature.qualifiers['note'] = variation_f.note
                     newRecord.features.append(newFeature)
 
-            # occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
-            # if (len(occurrenceComplement) > 1):
-            #     for i in range(1, len(occurrenceComplement)-1):
-            #         newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=-1), type=str(feature.name))
-            #         if variation_f.product != None:
-            #             newFeature.qualifiers['product'] = variation_f.product
-            #         if variation_f.gene != None:
-            #             newFeature.qualifiers['gene'] = variation_f.gene
-            #         if variation_f.bound_moiety != None:
-            #             newFeature.qualifiers['bound_moiety'] = variation_f.bound_moiety
-            #         if variation_f.mobile != None:
-            #             newFeature.qualifiers['mobile'] = variation_f.mobile
-            #         if variation_f.note != None:
-            #             newFeature.qualifiers['note'] = variation_f.note
-            #         newRecord.features.append(newFeature)
-            #          print "%-20s %-20s"% (str(feature.name), ("complement(" + (str(occurrenceComplement[i]) + ".." + str((occurrenceComplement[i]+len(featureSeqComplement)))) + ")"))
-            #          if variation_f.product != None:
-            #              print "%-20s %-20s"% ("", str("/product=\"" + variation_f.product[0] + "\""))
-            #          if variation_f.gene != None:
-            #              print "%-20s %-20s"% ("", str("/gene=\"" + variation_f.gene[0] + "\""))
-            #          if variation_f.bound_moiety != None:
-            #              print "%-20s %-20s"% ("", str("/bound_moiety=\"" + variation_f.bound_moiety[0] + "\""))
-            #          if variation_f.mobile != None:
-            #              print "%-20s %-20s"% ("", str("/mobile=\"" + variation_f.mobile[0] + "\""))
-            #          if variation_f.note != None:
-            #              print "%-20s %-20s"% ("", str("/note=\"" + variation_f.note[0] + "\""))
+            featureSeqReverse = str(variation_f.seq.reverse_complement)
+            occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
+            if (len(occurrenceComplement) > 1):
+                print occurrenceComplement
+                for i in range(1, len(occurrenceComplement)-1):
+                    newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature.name))
+                    if variation_f.product != None:
+                        newFeature.qualifiers['product'] = variation_f.product
+                    if variation_f.gene != None:
+                        newFeature.qualifiers['gene'] = variation_f.gene
+                    if variation_f.bound_moiety != None:
+                        newFeature.qualifiers['bound_moiety'] = variation_f.bound_moiety
+                    if variation_f.mobile != None:
+                        newFeature.qualifiers['mobile'] = variation_f.mobile
+                    if variation_f.note != None:
+                        newFeature.qualifiers['note'] = variation_f.note
+                        newRecord.features.append(newFeature)
+
 
     output_handle = open("outbput.gb", "w")
     SeqIO.write(newRecord, output_handle, "genbank")

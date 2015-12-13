@@ -1,6 +1,5 @@
 from Bio import SeqIO
 from Bio import SeqUtils
-from Bio.SeqUtils import six_frame_translations
 
 records = list(SeqIO.parse("vectors.gb", "genbank"))
 primerBindingSites = list(SeqIO.parse("common_primer.mfasta", "fasta"))
