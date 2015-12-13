@@ -14,44 +14,44 @@ features_to_check_list = [only_note, note_and_gene, gene_and_product, note_and_b
 def getFeature():
     handle = open("vectors.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
-        for f in record.features:
-
-            if f.type in only_note:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.note = f.qualifiers.get('note')
-                    yield feature
-            if f.type in note_and_gene:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.gene = f.qualifiers.get('gene')
-                    yield feature
-            if f.type in gene_and_product:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.product = f.qualifiers.get('product')
-                    feature.gene = f.qualifiers.get('gene')
-                    yield feature
-            if f.type in note_and_bound_moiety:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.product = f.qualifiers.get('bound_moiety')
-                    yield feature
-            if f.type in note_and_mobile:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.product = f.qualifiers.get('moble_element')
-                    yield feature
-            if f.type in gene:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.gene = f.qualifiers.get('gene')
-                    yield feature
-            if f.type in product:
-                if (testSeqLength(f.location.start,f.location.end) == 1):
-                    feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                    feature.product = f.qualifiers.get('product')
-                    yield feature
+        if len(record.seq) > 1500:
+            for f in record.features:
+                if f.type in only_note:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.note = f.qualifiers.get('note')
+                        yield feature
+                if f.type in note_and_gene:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.gene = f.qualifiers.get('gene')
+                        yield feature
+                if f.type in gene_and_product:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.product = f.qualifiers.get('product')
+                        feature.gene = f.qualifiers.get('gene')
+                        yield feature
+                if f.type in note_and_bound_moiety:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.product = f.qualifiers.get('bound_moiety')
+                        yield feature
+                if f.type in note_and_mobile:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.product = f.qualifiers.get('moble_element')
+                        yield feature
+                if f.type in gene:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.gene = f.qualifiers.get('gene')
+                        yield feature
+                if f.type in product:
+                    if (testSeqLength(f.location.start,f.location.end) == 1):
+                        feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
+                        feature.product = f.qualifiers.get('product')
+                        yield feature
 
 def testSeqLength(start, end):
     if (start + 2 > end):
