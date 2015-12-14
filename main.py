@@ -5,10 +5,31 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_dna
 from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import SeqFeature
+import pickle
 
-if __name__ == "__main__":
+file_Name = "featureObjects"
+
+def generate():
     featureStatistic_container = countFeatures(getFeature())
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
+    return featureStatistic_container
+
+def write(featureStatistic_container):
+
+    # open the file for writing
+    fileObject = open(file_Name,'wb')
+    pickle.dump(featureStatistic_container,fileObject)
+    fileObject.close()
+
+
+def read():
+    ileObject = open(file_Name,'r')
+    # load the object from the file into var b
+    return pickle.load(fileObject)
+
+if __name__ == "__main__":
+    featureStatistic_container = generate()
+    write(featureStatistic_container)
 
     record = SeqIO.read("nanobody.fasta", "fasta")
     newRecord = SeqRecord(record.seq)

@@ -1,4 +1,6 @@
 import math
+import collections
+
 only_note = ['promoter', 'oriT', 'rep_origin', 'primer_bind', 'terminator', 'misc_signal', 'misc_recomb', 'LTR', 'enhancer']
 note_and_gene = ['-35_signal', '-10_signal', 'RBS', 'polyA_signal', 'sig_peptide']
 gene_and_product = ['CDS']
@@ -6,6 +8,8 @@ note_and_bound_moiety = ['protein_bind', 'misc_binding']
 note_and_mobile = ['mobile_element']
 gene = ['mRNA']
 product = ['tRNA', 'rRNA']
+
+
 
 class FeatureStatistic:
     def __init__(self, name):
@@ -129,6 +133,10 @@ class Statistic:
                 feature.varationList = tempVariationList
                 tempFeatureContainer.append(feature)
         self.featureContainer = tempFeatureContainer
+
+    def get_most_commom(self, qulification):
+        counter=collections.Counter(qulification)
+        return counter.most_common(1)[0][0]
 
     def removeSpuriousAnnotations(self):
         ## remove feature variation if:
