@@ -37,6 +37,8 @@ def countFeatures(features):
     for feature in features:
         seq = feature[1]
         feature = feature[0]
+        print seq
+        print feature
         # fill the features_Container with all features as FeatureStatistic object
         if len(features_Container) == 0:
             for features_to_check in features_to_check_list:
