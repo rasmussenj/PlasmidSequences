@@ -1,5 +1,5 @@
 import math
-
+import collections
 
 class FeatureStatistic:
     def __init__(self, name):
@@ -54,6 +54,10 @@ class Statistic:
                 feature.varationList = tempVariationList
                 tempFeatureContainer.append(feature)
         self.featureContainer = tempFeatureContainer
+
+    def get_most_commom(self, qulification):
+        counter=collections.Counter(qulification)
+        return counter.most_common(1)[0][0]
 
     def removeSpuriousAnnotations(self):
         ## remove feature variation if:
