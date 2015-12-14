@@ -12,7 +12,7 @@ product = ['tRNA', 'rRNA']
 features_to_check_list = [only_note, note_and_gene, gene_and_product, note_and_bound_moiety, note_and_mobile, gene, product]
 
 def getFeature():
-    handle = open("vectors.gb", "rU")
+    handle = open("vectors-100.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         if len(record.seq) > 1500:
             for f in record.features:
@@ -25,6 +25,7 @@ def getFeature():
                     if (testSeqLength(f.location.start,f.location.end) == 1):
                         feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
                         feature.gene = f.qualifiers.get('gene')
+                        feature.note = f.qualifiers.get('note')
                         yield feature
                 if f.type in gene_and_product:
                     if (testSeqLength(f.location.start,f.location.end) == 1):
@@ -35,12 +36,14 @@ def getFeature():
                 if f.type in note_and_bound_moiety:
                     if (testSeqLength(f.location.start,f.location.end) == 1):
                         feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                        feature.product = f.qualifiers.get('bound_moiety')
+                        feature.bound_moiety = f.qualifiers.get('bound_moiety')
+                        feature.note = f.qualifiers.get('note')
                         yield feature
                 if f.type in note_and_mobile:
                     if (testSeqLength(f.location.start,f.location.end) == 1):
                         feature = Feature(record.seq[f.location.start:f.location.end], f.type,  0)
-                        feature.product = f.qualifiers.get('moble_element')
+                        feature.moble_element = f.qualifiers.get('moble_element')
+                        feature.note = f.qualifiers.get('note')
                         yield feature
                 if f.type in gene:
                     if (testSeqLength(f.location.start,f.location.end) == 1):
@@ -67,7 +70,7 @@ def countFeatures(features):
             for features_to_check in features_to_check_list:
                 for f in features_to_check:
                     features_Container.append(FeatureStatistic(f))
-
+        features_Container
         # get the FeatureStatistic object which corresponds with the actual feature
         for statFeature in it.ifilter(lambda f: f.name == feature.name, features_Container):
             seq_in_list = False

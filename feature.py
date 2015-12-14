@@ -63,7 +63,7 @@ class Statistic:
             tempVariationList = []
             for f_var in feature.varationList:
                 f_var.present_in_percent = f_var.count / countAll * 100
-                if (f_var.present_in_percent > 10):
+                if (f_var.present_in_percent > 5):
                     tempVariationList.append(f_var)
 
             feature.varationList = sorted(tempVariationList, key=lambda var: var.count, reverse=True)

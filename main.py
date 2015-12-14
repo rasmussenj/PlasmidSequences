@@ -10,7 +10,7 @@ if __name__ == "__main__":
     featureStatistic_container = countFeatures(getFeature())
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
 
-    record = SeqIO.read("EcoliK12.gb", "genbank")
+    record = SeqIO.read("nanobody.fasta", "fasta")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                         newFeature.qualifiers['mobile'] = variation_f.mobile
                     if variation_f.note != None:
                         newFeature.qualifiers['note'] = variation_f.note
-                        newRecord.features.append(newFeature)
+                    newRecord.features.append(newFeature)
 
 
     output_handle = open("outbput.gb", "w")
