@@ -28,72 +28,8 @@ class FeatureStatistic:
             self.note = []
 
 
-        def isSame(self, nextFeature):
-            if nextFeature.type in only_note:
-                if self.note[0] == nextFeature.qualifiers.get('note'):
-                    self.gene.append(nextFeature.qualifiers.get('gene'))
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-                    self.product.append(nextFeature.qualifiers.get('product'))
-
-                    return True
-
-            if nextFeature.type in note_and_gene:
-                if (self.note[0] == nextFeature.qualifiers.get('note') and
-                    self.gene[0] == nextFeature.qualifiers.get('gene')):
-
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-                    self.product.append(nextFeature.qualifiers.get('product'))
-                    return True
 
 
-            if nextFeature.type in gene_and_product:
-                if (self.gene[0] == nextFeature.qualifiers.get('gene') and
-                            self.product[0] == nextFeature.qualifiers.get('product')):
-
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-                    self.note.append(nextFeature.qualifiers.get('note'))
-
-                    return True
-
-            if nextFeature.type in note_and_bound_moiety:
-                if (self.note[0] == nextFeature.qualifiers.get('note') and
-                            self.bound_moiety[0] == nextFeature.qualifiers.get('bound_moiety')):
-                    self.gene.append(nextFeature.qualifiers.get('gene'))
-
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-
-                    self.product.append(nextFeature.qualifiers.get('product'))
-                    return True
-
-            if nextFeature.type in note_and_mobile:
-                if (self.note[0] == nextFeature.qualifiers.get('note') and
-                            self.mobile[0] == nextFeature.qualifiers.get('mobile')):
-                    self.gene.append(nextFeature.gene)
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-
-                    self.product.append(nextFeature.qualifiers.get('product'))
-                    return True
-
-
-            if nextFeature.type in gene:
-                if (self.gene[0] == nextFeature.qualifiers.get('gene')):
-
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-                    self.note.append(nextFeature.qualifiers.get('note'))
-                    self.product.append(nextFeature.qualifiers.get('product'))
-                    return True
-
-            if nextFeature.type in product:
-                if (self.product[0] == nextFeature.qualifiers.get('product')):
-                    self.gene.append(nextFeature.qualifiers.get('gene'))
-                    self.bound_moiety.append(nextFeature.qualifiers.get('bound_moiety'))
-                    self.mobile.append(nextFeature.qualifiers.get('mobile'))
-                    self.note.append(nextFeature.qualifiers.get('note'))
-                    return True
 
 
 class Feature:

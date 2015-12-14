@@ -10,7 +10,23 @@ import pickle
 file_Name = "featureObjects"
 
 def generate():
-    featureStatistic_container = countFeatures(getFeature())
+    featureStatistic_container = getFeature()
+    for key in featureStatistic_container:
+        print key
+        for variation in featureStatistic_container[key]:
+            print "-------------new variation -----------"
+            print "count", variation.count
+            print "note"
+            print variation.note
+            print "gene"
+            print variation.gene
+            print "bound_moiety"
+            print variation.bound_moiety
+
+            print "mobile"
+            print variation.mobile
+
+
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
     return featureStatistic_container
 
@@ -29,6 +45,7 @@ def read():
 
 if __name__ == "__main__":
     featureStatistic_container = generate()
+    featureStatistic_container
     #write(featureStatistic_container)
     featureStatistic_container
     record = SeqIO.read("nanobody.fasta", "fasta")
