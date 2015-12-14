@@ -23,14 +23,14 @@ def write(featureStatistic_container):
 
 
 def read():
-    ileObject = open(file_Name,'r')
+    fileObject = open(file_Name,'r')
     # load the object from the file into var b
     return pickle.load(fileObject)
 
 if __name__ == "__main__":
     featureStatistic_container = generate()
-    write(featureStatistic_container)
-
+    #write(featureStatistic_container)
+    featureStatistic_container
     record = SeqIO.read("nanobody.fasta", "fasta")
     newRecord = SeqRecord(record.seq)
 
