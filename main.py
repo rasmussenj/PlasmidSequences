@@ -12,20 +12,23 @@ file_Name = "featureObjects"
 def generate():
     featureStatistic_container = getFeature()
     for key in featureStatistic_container:
-        print key
+        print key, "---------------------------------new feature"
         for variation in featureStatistic_container[key]:
-            print "-------------new variation -----------"
-            print "count", variation.count
-            print "note"
-            print variation.note
-            print "gene"
-            print variation.gene
-            print "bound_moiety"
-            print variation.bound_moiety
+            if variation.count >3:
+                print "-------------new variation -----------"
+                print "count", variation.count
+                print "note"
+                print variation.note
+                print "gene"
+                print variation.gene
+                print "bound_moiety"
+                print variation.bound_moiety
 
-            print "mobile"
-            print variation.mobile
+                print "mobile"
+                print variation.mobile
 
+                print "product"
+                print variation.product
 
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
     return featureStatistic_container
