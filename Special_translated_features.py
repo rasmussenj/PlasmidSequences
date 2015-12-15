@@ -4,10 +4,10 @@ from Bio import SeqIO
 from Bio.Seq import reverse_complement, translate
 
 
-records = list(SeqIO.parse("vectors.gb", "genbank"))
+records = list(SeqIO.parse("EcoliK12.gb", "genbank"))
 specialTranslatedFeatures = list(SeqIO.parse("tags_epitopes.mfasta", "fasta"))
 
-for x in range(399, 400):
+for x in range(len(records)):
 
     difference = len(records[x].seq) % 3
 
@@ -36,21 +36,21 @@ for x in range(399, 400):
         thirdFrameMatches = re.finditer(featureSeq, thirdReadingFrame)
 
         firstFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
-        secondFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
-        thirdFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
+        secondFrameComplementMatches = re.finditer(featureSeq, secondReadingFrameComplement)
+        thirdFrameComplementMatches = re.finditer(featureSeq, thirdReadingFrameComplement)
 
 
         for m in firstFrameMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
         for m in secondFrameMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
         for m in thirdFrameMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
 
 
         for m in firstFrameComplementMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
         for m in secondFrameComplementMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
         for m in thirdFrameComplementMatches:
-            print m.start(), m.end()
+            print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(records[x].id)
