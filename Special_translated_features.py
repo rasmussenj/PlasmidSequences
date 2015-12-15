@@ -1,4 +1,6 @@
-from Bio import SeqIO, SeqUtils
+import re
+
+from Bio import SeqIO
 from Bio.Seq import reverse_complement, translate
 
 
@@ -28,17 +30,27 @@ for x in range(399, 400):
     for feature in specialTranslatedFeatures:
         featureName = feature.name
         featureSeq = str(feature.seq)
-        featureLength = len(feature.seq)
 
-        firstFrameMatches = SeqUtils.nt_search(firstReadingFrame, featureSeq)
-        secondFrameMatches = SeqUtils.nt_search(secondReadingFrame, featureSeq)
-        thirdFrameMatches = SeqUtils.nt_search(thirdReadingFrame, featureSeq)
+        firstFrameMatches = re.finditer(featureSeq, firstReadingFrame)
+        secondFrameMatches = re.finditer(featureSeq, secondReadingFrame)
+        thirdFrameMatches = re.finditer(featureSeq, thirdReadingFrame)
 
-        firstFrameComplementMatches = SeqUtils.nt_search(firstReadingFrameComplement, featureSeq)
-        secondFrameComplementMatches = SeqUtils.nt_search(secondReadingFrameComplement, featureSeq)
-        thirdFrameComplementMatches = SeqUtils.nt_search(thirdReadingFrameComplement, featureSeq)
+        firstFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
+        secondFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
+        thirdFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
 
-        if (len(firstFrameMatches) > 1):
-            for j in range(1, len(firstFrameMatches)):
 
-                print featureName + " Matches in first reading Frame on position " + str(firstFrameMatches[j]) + ".." + str(firstFrameMatches[j] + featureLength)
+        for m in firstFrameMatches:
+            print m.start(), m.end()
+        for m in secondFrameMatches:
+            print m.start(), m.end()
+        for m in thirdFrameMatches:
+            print m.start(), m.end()
+
+
+        for m in firstFrameComplementMatches:
+            print m.start(), m.end()
+        for m in secondFrameComplementMatches:
+            print m.start(), m.end()
+        for m in thirdFrameComplementMatches:
+            print m.start(), m.end()
