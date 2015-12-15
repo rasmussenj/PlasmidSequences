@@ -5,12 +5,33 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import generic_dna
 from Bio.SeqFeature import FeatureLocation
 from Bio.SeqFeature import SeqFeature
+import pickle
 
-if __name__ == "__main__":
+file_Name = "featureObjects"
+
+def generate():
     featureStatistic_container = countFeatures(getFeature())
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
+    return featureStatistic_container
 
-    record = SeqIO.read("EcoliK12.gb", "genbank")
+def write(featureStatistic_container):
+
+    # open the file for writing
+    fileObject = open(file_Name,'wb')
+    pickle.dump(featureStatistic_container,fileObject)
+    fileObject.close()
+
+
+def read():
+    fileObject = open(file_Name,'r')
+    # load the object from the file into var b
+    return pickle.load(fileObject)
+
+if __name__ == "__main__":
+    featureStatistic_container = generate()
+    #write(featureStatistic_container)
+    featureStatistic_container
+    record = SeqIO.read("nanobody.fasta", "fasta")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -59,7 +80,7 @@ if __name__ == "__main__":
                         newFeature.qualifiers['mobile'] = variation_f.mobile
                     if variation_f.note != None:
                         newFeature.qualifiers['note'] = variation_f.note
-                        newRecord.features.append(newFeature)
+                    newRecord.features.append(newFeature)
 
 
     output_handle = open("outbput.gb", "w")
