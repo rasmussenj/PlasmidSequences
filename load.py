@@ -19,7 +19,6 @@ for features_to_check in features_to_check_list:
         features_Container[f] = []
 
 
-
 def getFeature():
     handle = open("vectors-100.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
@@ -33,15 +32,12 @@ def getFeature():
     return features_Container
 
 
-
-
-
-
 def testSeqLength(start, end):
     if (start + 2 > end):
         return 0
     else:
         return 1
+
 
 def countFeatures(feature, seq):
         # get the FeatureStatistic object which corresponds with the actual feature
