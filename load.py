@@ -26,7 +26,6 @@ def getFeature():
             for f in record.features:
                 for list in features_to_check_list:
                     if f.type in list:
-
                         countFeatures(f, record.seq[f.location.start:f.location.end])
     features_Container
     return features_Container
