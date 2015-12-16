@@ -66,7 +66,6 @@ def countFeatures(feature, seq):
                         variation.count += 1
                         break
 
-
                 elif feature.type in note_and_gene:
                     if (variation.note[0] == note and variation.gene == gene):
                         appendQualifier(variation.bound_moiety, bound_moiety)
@@ -98,7 +97,6 @@ def countFeatures(feature, seq):
                         appendQualifier(variation.gene, gene)
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.product, product)
-
                         variation.count += 1
                         break
 
@@ -108,7 +106,6 @@ def countFeatures(feature, seq):
                         appendQualifier(variation.product, product)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.note, note)
-
                         variation.count += 1
                         break
 
@@ -118,13 +115,11 @@ def countFeatures(feature, seq):
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.note, note)
                         appendQualifier(variation.gene, gene)
-
                         variation.count += 1
                         break
 
-            # if seq not found in statFeature, create a new variation of the feature
+        # if seq not found in statFeature, create a new variation of the feature
         if not seq_in_list:
-
             new_variation = FeatureStatistic.Varation(seq,1)
             new_variation.note.append(note)
             new_variation.bound_moiety.append(bound_moiety)
