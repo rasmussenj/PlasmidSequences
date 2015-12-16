@@ -33,9 +33,9 @@ def getFeature():
 
 def testSeqLength(start, end):
     if (start + 2 > end):
-        return 0
+        return False
     else:
-        return 1
+        return True
 
 
 def countFeatures(feature, seq):

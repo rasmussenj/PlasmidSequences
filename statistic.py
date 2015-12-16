@@ -4,9 +4,9 @@ import collections
 class Statistic:
     def __init__(self, featureContainer):
         self.featureContainer = featureContainer
-        self.removeSpuriousCommonFeatures()
-        self.removeSpuriousAnnotations()
-        self.showStaistic()
+        # self.removeSpuriousCommonFeatures()
+        # self.removeSpuriousAnnotations()
+        # self.showStaistic()
 
     def removeSpuriousCommonFeatures(self):
         tempFeatureContainer =[]

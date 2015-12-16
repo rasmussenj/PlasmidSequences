@@ -63,7 +63,7 @@ if __name__ == "__main__":
     strRecord = str(record.seq)
 
     for feature in featureStatistic_container:
-        for variation_f in feature.varationList:
+        for variation_f in featureStatistic_container[feature]:
 
             featureSeq = str(variation_f.seq)
             featureSeqComplement = str(variation_f.seq.complement())
