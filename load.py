@@ -10,7 +10,8 @@ note_and_mobile = ['mobile_element']
 only_gene = ['mRNA']
 only_product = ['tRNA', 'rRNA']
 
-features_to_check_list = [only_note, note_and_gene, gene_and_product, note_and_bound_moiety, note_and_mobile, gene, product]
+features_to_check_list = [only_note, note_and_gene, gene_and_product,
+                          note_and_bound_moiety, note_and_mobile, only_gene, only_product]
 features_Container = {}
 # fill the features_Container with all features as FeatureStatistic object
 for features_to_check in features_to_check_list:
@@ -20,7 +21,7 @@ for features_to_check in features_to_check_list:
 
 
 def getFeature():
-    handle = open("vectors.gb", "rU")
+    handle = open("vectors-100.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         if len(record.seq) > 1500:
             for f in record.features:

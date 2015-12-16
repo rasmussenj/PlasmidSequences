@@ -1,4 +1,5 @@
 from load import *
+from statistic import *
 from Bio import SeqIO
 from Bio import SeqUtils
 from Bio.SeqRecord import SeqRecord
@@ -14,27 +15,26 @@ def generate():
     for key in featureStatistic_container:
         print key, "---------------------------------new feature"
         for variation in featureStatistic_container[key]:
-            if variation.count >3:
+            if variation.count > 3:
                 print "-------------new variation -----------"
                 print "count", variation.count
-                print "note"
-                print variation.note
-                print "gene"
-                print variation.gene
-                print "bound_moiety"
-                print variation.bound_moiety
-
-                print "mobile"
-                print variation.mobile
-
-                print "product"
-                print variation.product
+                # print "note"
+                # print variation.note
+                # print "gene"
+                # print variation.gene
+                # print "bound_moiety"
+                # print variation.bound_moiety
+                #
+                # print "mobile"
+                # print variation.mobile
+                #
+                # print "product"
+                # print variation.product
 
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
     return featureStatistic_container
 
 def write(featureStatistic_container):
-
     # open the file for writing
     fileObject = open(file_Name,'wb')
     pickle.dump(featureStatistic_container,fileObject)
