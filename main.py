@@ -15,7 +15,7 @@ def generate():
     for key in featureStatistic_container:
         print key, "---------------------------------new feature"
         for variation in featureStatistic_container[key]:
-            if variation.count > 3:
+            if variation.count > 0:
                 print "-------------new variation -----------"
                 print "count", variation.count
                 # print "note"

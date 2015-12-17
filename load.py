@@ -19,13 +19,15 @@ for features_to_check in features_to_check_list:
         features_Container[f] = []
 
 
+################################# Functions ######################################
+
 def getFeature():
-    handle = open("vectors-100.gb", "rU")
+    handle = open("vectors-5.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         if len(record.seq) > 1500:
             for f in record.features:
                 for list in features_to_check_list:
-                    if f.type in list:
+                    if f.type in list and testSeqLength(f.location.start, f.location.end):
                         countFeatures(f, record.seq[f.location.start:f.location.end])
     features_Container
     return features_Container
@@ -51,10 +53,11 @@ def countFeatures(feature, seq):
         seq_in_list = False
         for variation in accVariationList:
             if variation.seq == seq:
-                seq_in_list = True
+
 
                 if feature.type in only_note:
                     if variation.note[0] == note:
+                        seq_in_list = True
                         appendQualifier(variation.gene, gene)
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.mobile, mobile)
@@ -67,7 +70,6 @@ def countFeatures(feature, seq):
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.product, product)
-
                         variation.count += 1
                         break
 
