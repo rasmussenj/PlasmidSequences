@@ -4,44 +4,45 @@ import collections
 class Statistic:
     def __init__(self, featureContainer):
         self.featureContainer = featureContainer
-        # self.removeSpuriousCommonFeatures()
-        # self.removeSpuriousAnnotations()
+        self.removeSpuriousCommonFeatures()
+        self.removeSpuriousAnnotations()
+        self.removeMultipleQulification()
         # self.showStaistic()
 
-    def removeSpuriousCommonFeatures(self):
-        tempFeatureContainer =[]
-
-        for feature in self.featureContainer:
-            ## remove all features without any variation
-            if len(feature.varationList) != 0:
-                ## remove feature variation if:
-                #  less than three occurrences in learning file
-                tempVariationList =[]
-                for f_var in feature.varationList:
-                    if f_var.count > 3:
-                        tempVariationList.append(f_var)
-                feature.varationList = tempVariationList
-                tempFeatureContainer.append(feature)
-        self.featureContainer = tempFeatureContainer
+    def removeSpuriousCommonFeatures(self): # remove feature less then 3
+        keysToRemove = []
+        for key in self.featureContainer:
+            variationSum = 0
+            for variation in self.featureContainer[key]:
+                variationSum += variation.count
+            if variationSum < 3:
+                keysToRemove.append(key)
+        for key in keysToRemove:
+            del self.featureContainer[key]
 
     def get_most_commom(self, qulification):
         counter=collections.Counter(qulification)
         return counter.most_common(1)[0][0]
 
+
     def removeSpuriousAnnotations(self):
-        ## remove feature variation if:
-        #  present in less than 10 % of the instances
-        for feature in self.featureContainer:
-            countAll = math.fsum([x.count for x in feature.varationList])
-            tempVariationList = []
-            for f_var in feature.varationList:
-                f_var.present_in_percent = f_var.count / countAll * 100
-                if (f_var.present_in_percent > 5):
-                    tempVariationList.append(f_var)
+        for key in self.featureContainer:
+            variationSum = 0
+            for variation in self.featureContainer[key]:
+                variationSum += variation.count
+            for variation in self.featureContainer[key]:
+                present_in_percent = variation.count / variationSum * 100
+                if present_in_percent > 5:
+                    self.featureContainer[key].remove(variation)
 
-            feature.varationList = sorted(tempVariationList, key=lambda var: var.count, reverse=True)
-
-
+    def removeMultipleQulification(self):
+        for key in self.featureContainer:
+            for variation in self.featureContainer[key]:
+                variation.note = self.get_most_commom(variation.note)
+                variation.gene = self.get_most_commom(variation.gene)
+                variation.bound_moiety = self.get_most_commom(variation.bound_moiety)
+                variation.mobile = self.get_most_commom(variation.mobile)
+                variation.product = self.get_most_commom(variation.product)
 
     def showStaistic(self):
         for f in self.featureContainer:

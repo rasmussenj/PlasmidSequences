@@ -29,7 +29,6 @@ def getFeature():
                 for list in features_to_check_list:
                     if f.type in list and testSeqLength(f.location.start, f.location.end):
                         countFeatures(f, record.seq[f.location.start:f.location.end])
-    features_Container
     return features_Container
 
 
@@ -53,8 +52,6 @@ def countFeatures(feature, seq):
         seq_in_list = False
         for variation in accVariationList:
             if variation.seq == seq:
-
-
                 if feature.type in only_note:
                     if variation.note[0] == note:
                         seq_in_list = True
@@ -66,7 +63,8 @@ def countFeatures(feature, seq):
                         break
 
                 elif feature.type in note_and_gene:
-                    if (variation.note[0] == note and variation.gene == gene):
+                    if (variation.note[0] == note and variation.gene[0] == gene):
+                        seq_in_list = True
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.product, product)
@@ -74,7 +72,8 @@ def countFeatures(feature, seq):
                         break
 
                 elif feature.type in gene_and_product:
-                    if (variation.gene[0] == gene and variation.product == product):
+                    if (variation.gene[0] == gene and variation.product[0] == product):
+                        seq_in_list = True
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.note, note)
@@ -84,6 +83,7 @@ def countFeatures(feature, seq):
 
                 elif feature.type in note_and_bound_moiety:
                     if (variation.note[0] == note and variation.bound_moiety[0] == bound_moiety):
+                        seq_in_list = True
                         appendQualifier(variation.gene, gene)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.product, product)
@@ -91,7 +91,8 @@ def countFeatures(feature, seq):
                         break
 
                 elif feature.type in note_and_mobile:
-                    if (variation.note[0] == note and variation.mobile == mobile):
+                    if (variation.note[0] == note and variation.mobile[0] == mobile):
+                        seq_in_list = True
                         appendQualifier(variation.gene, gene)
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.product, product)
@@ -100,6 +101,7 @@ def countFeatures(feature, seq):
 
                 elif feature.type in only_gene:
                     if (variation.gene[0] == variation.gene):
+                        seq_in_list = True
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.product, product)
                         appendQualifier(variation.mobile, mobile)
@@ -109,6 +111,7 @@ def countFeatures(feature, seq):
 
                 elif feature.type in only_product:
                     if (variation.product[0] == product):
+                        seq_in_list = True
                         appendQualifier(variation.bound_moiety, bound_moiety)
                         appendQualifier(variation.mobile, mobile)
                         appendQualifier(variation.note, note)

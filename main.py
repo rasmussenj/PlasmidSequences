@@ -12,26 +12,35 @@ file_Name = "featureObjects"
 
 def generate():
     featureStatistic_container = getFeature()
-    for key in featureStatistic_container:
-        print key, "---------------------------------new feature"
-        for variation in featureStatistic_container[key]:
-            if variation.count > 0:
-                print "-------------new variation -----------"
-                print "count", variation.count
-                # print "note"
-                # print variation.note
-                # print "gene"
-                # print variation.gene
-                # print "bound_moiety"
-                # print variation.bound_moiety
-                #
-                # print "mobile"
-                # print variation.mobile
-                #
-                # print "product"
-                # print variation.product
+    # for key in featureStatistic_container:
+    #     print key, "---------------------------------new feature"
+    #     for variation in featureStatistic_container[key]:
+    #         if variation.count > 0 and key == 'CDS':
+    #             print "-------------new variation -----------"
+    #             print "count", variation.count
+    #             print "note", variation.note
+    #             print "gene", variation.gene
+    #             print "bound_moiety", variation.bound_moiety
+    #             print "mobile", variation.mobile
+    #             print "product", variation.product
 
     featureStatistic_container = Statistic(featureStatistic_container).featureContainer
+
+    # print "----------------------------------------------------------------- after staticstis ----------------------------"
+    #
+    # for key in featureStatistic_container:
+    #     print key, "---------------------------------new feature"
+    #     for variation in featureStatistic_container[key]:
+    #         if variation.count > 0 and key == 'CDS':
+    #             print "-------------new variation -----------"
+    #             print "seq", variation.seq
+    #             print "count", variation.count
+    #             print "note", variation.note
+    #             print "gene", variation.gene
+    #             print "bound_moiety", variation.bound_moiety
+    #             print "mobile", variation.mobile
+    #             print "product", variation.product
+
     return featureStatistic_container
 
 def write(featureStatistic_container):
@@ -49,9 +58,10 @@ def read():
 if __name__ == "__main__":
     featureStatistic_container = generate()
     featureStatistic_container
-    #write(featureStatistic_container)
+    # write(featureStatistic_container)
     featureStatistic_container
-    record = SeqIO.read("nanobody.fasta", "fasta")
+    # record = SeqIO.read("nanobody.fasta", "fasta")
+    record = SeqIO.read("vectors-1.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -60,46 +70,43 @@ if __name__ == "__main__":
     newRecord.name = record.name
     newRecord.description = record.description
 
-    strRecord = str(record.seq)
+    recordSeq = str(record.seq)
 
     for feature in featureStatistic_container:
-        for variation_f in featureStatistic_container[feature]:
+        for variation in featureStatistic_container[feature]:
 
-            featureSeq = str(variation_f.seq)
-            featureSeqComplement = str(variation_f.seq.complement())
-
-            occurrence = SeqUtils.nt_search(strRecord, featureSeq)
-
+            featureSeq = str(variation.seq)
+            occurrence = SeqUtils.nt_search(recordSeq, featureSeq)
             if (len(occurrence) > 1):
-                for i in range(1,len(occurrence)-1):
-                    newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=1), type=str(feature.name))
-                    if variation_f.product != None:
-                        newFeature.qualifiers['product'] = variation_f.product
-                    if variation_f.gene != None:
-                        newFeature.qualifiers['gene'] = variation_f.gene
-                    if variation_f.bound_moiety != None:
-                        newFeature.qualifiers['bound_moiety'] = variation_f.bound_moiety
-                    if variation_f.mobile != None:
-                        newFeature.qualifiers['mobile'] = variation_f.mobile
-                    if variation_f.note != None:
-                        newFeature.qualifiers['note'] = variation_f.note
+                for i in range(1,len(occurrence)):
+                    newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=1), type=str(feature))
+                    if variation.product != None:
+                        newFeature.qualifiers['product'] = variation.product
+                    if variation.gene != None:
+                        newFeature.qualifiers['gene'] = variation.gene
+                    if variation.bound_moiety != None:
+                        newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
+                    if variation.mobile != None:
+                        newFeature.qualifiers['mobile'] = variation.mobile
+                    if variation.note != None:
+                        newFeature.qualifiers['note'] = variation.note
                     newRecord.features.append(newFeature)
 
-            featureSeqReverse = str(variation_f.seq.reverse_complement)
-            occurrenceComplement = SeqUtils.nt_search(strRecord, featureSeqComplement)
+            featureSeqComplement = str(variation.seq.complement())
+            occurrenceComplement = SeqUtils.nt_search(recordSeq, featureSeqComplement)
             if (len(occurrenceComplement) > 1):
-                for i in range(1, len(occurrenceComplement)-1):
-                    newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature.name))
-                    if variation_f.product != None:
-                        newFeature.qualifiers['product'] = variation_f.product
-                    if variation_f.gene != None:
-                        newFeature.qualifiers['gene'] = variation_f.gene
-                    if variation_f.bound_moiety != None:
-                        newFeature.qualifiers['bound_moiety'] = variation_f.bound_moiety
-                    if variation_f.mobile != None:
-                        newFeature.qualifiers['mobile'] = variation_f.mobile
-                    if variation_f.note != None:
-                        newFeature.qualifiers['note'] = variation_f.note
+                for i in range(1, len(occurrenceComplement)):
+                    newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature))
+                    if variation.product != None:
+                        newFeature.qualifiers['product'] = variation.product
+                    if variation.gene != None:
+                        newFeature.qualifiers['gene'] = variation.gene
+                    if variation.bound_moiety != None:
+                        newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
+                    if variation.mobile != None:
+                        newFeature.qualifiers['mobile'] = variation.mobile
+                    if variation.note != None:
+                        newFeature.qualifiers['note'] = variation.note
                     newRecord.features.append(newFeature)
 
 
