@@ -6,7 +6,7 @@ records = list(SeqIO.parse("vectors.gb", "genbank"))
 primerBindingSites = list(SeqIO.parse("common_primer.mfasta", "fasta"))
 
 
-for x in range(450, 500):
+for x in range(499, 500):
     seqRecordToCheck = str(records[x].seq)
     seqRecordToCheckComplement = str(reverse_complement(records[x].seq))
 
