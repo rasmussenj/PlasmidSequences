@@ -1,9 +1,9 @@
 class FeatureStatistic:
     def __init__(self, name):
-        self.varationList = []
+        self.variationList = []
         self.name = name
 
-    class Varation:
+    class Variation:
         def __init__(self, seq, count):
             self.seq = seq
             self.count = count
