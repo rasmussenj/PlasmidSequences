@@ -1,7 +1,7 @@
 import math
 import collections
 from Bio import SeqIO
-from feature import FeatureStatistic
+from feature import *
 
 
 class FeatureDic:
@@ -86,7 +86,7 @@ class FeatureDic:
     def appendPrimer(self, path, form):
         primerVariationList = []
         for record in SeqIO.parse(path, form):
-            primerVariation = FeatureStatistic.Varation(record.seq, 1)
+            primerVariation = Variation(record.seq, 1)
 
             primerVariation.note = record.description
             primerVariationList.append(primerVariation)
