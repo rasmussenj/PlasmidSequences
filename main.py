@@ -86,7 +86,7 @@ def writeSTF():
         firstReadingFrameComplementCircular = firstReadingFrameComplement + firstReadingFrameComplement[
                                                                             0:featureLength - 1]
         secondReadingFrameComplementCircular = secondReadingFrameComplement + secondReadingFrameComplement[
-                                                                              0:featureLength - 1]
+                                                                         0:featureLength - 1]
         thirdReadingFrameComplementCircular = thirdReadingFrameComplement + thirdReadingFrameComplement[
                                                                             0:featureLength - 1]
 
