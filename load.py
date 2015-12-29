@@ -22,7 +22,7 @@ for features_to_check in features_to_check_list:
 ################################# Functions ######################################
 
 def getFeature():
-    handle = open("vectors-5.gb", "rU")
+    handle = open("vectors.gb", "rU")
     for record in SeqIO.parse(handle, "genbank") :
         if len(record.seq) > 1500:
             for f in record.features:
