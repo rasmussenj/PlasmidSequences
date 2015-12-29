@@ -136,7 +136,7 @@ if __name__ == "__main__":
                                   str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + \
-                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
                     for m in secondFrameMatchesCircular:
                         if m.end() <= seqLength:
@@ -144,7 +144,7 @@ if __name__ == "__main__":
                                   str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + \
-                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
                     for m in thirdFrameMatchesCircular:
                         if m.end() <= seqLength:
@@ -152,7 +152,7 @@ if __name__ == "__main__":
                                   str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + \
-                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
 
 
@@ -162,7 +162,7 @@ if __name__ == "__main__":
                                   ".." + str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + \
-                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
                     for m in secondFrameComplementMatchesCircular:
                         if m.end() <= seqLength:
@@ -170,7 +170,7 @@ if __name__ == "__main__":
                                   ".." + str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + \
-                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
                     for m in thirdFrameComplementMatchesCircular:
                         if m.end() <= seqLength:
@@ -178,7 +178,7 @@ if __name__ == "__main__":
                                   ".." + str(m.end()) + " in record: " + str(record.id)
                         else:
                             print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + \
-                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength - m.end())
 
             if(feature == "PBS"):
                 for variation in featureStatistic_container[feature]:
