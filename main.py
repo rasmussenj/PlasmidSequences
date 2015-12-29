@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #write(featureStatistic_container)
     #featureStatistic_container = read()
     # record = SeqIO.read("nanobody.fasta", "fasta")
-    record = SeqIO.read("vectors-1.gb", "genbank")
+    record = SeqIO.read("EcoliK12.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                             newFeature.qualifiers['note'] = variation.note
                         newRecord.features.append(newFeature)
         else:
-            if(feature == "SFT"):
+            if(feature == "STF"):
                 difference = len(record.seq) % 3
                 seqRecordToCheck = str(record.seq)
                 if difference != 0:
@@ -110,32 +110,75 @@ if __name__ == "__main__":
                 for variation in featureStatistic_container[feature]:
                     featureName = variation.note
                     featureSeq = str(variation.seq)
+                    featureLength = len(variation.seq)
+                    seqLength = len(seqRecordToCheck)
 
-                    firstFrameMatches = re.finditer(featureSeq, firstReadingFrame)
-                    secondFrameMatches = re.finditer(featureSeq, secondReadingFrame)
-                    thirdFrameMatches = re.finditer(featureSeq, thirdReadingFrame)
+                    firstReadingFrameCircular = firstReadingFrame + firstReadingFrame[0:featureLength-1]
+                    secondReadingFrameCircular = secondReadingFrame + secondReadingFrame[0:featureLength-1]
+                    thirdReadingFrameCircular = thirdReadingFrame + thirdReadingFrame[0:featureLength-1]
 
-                    firstFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
-                    secondFrameComplementMatches = re.finditer(featureSeq, secondReadingFrameComplement)
-                    thirdFrameComplementMatches = re.finditer(featureSeq, thirdReadingFrameComplement)
+                    firstReadingFrameComplementCircular = firstReadingFrameComplement + firstReadingFrameComplement[0:featureLength-1]
+                    secondReadingFrameComplementCircular = secondReadingFrameComplement + secondReadingFrameComplement[0:featureLength-1]
+                    thirdReadingFrameComplementCircular = thirdReadingFrameComplement + thirdReadingFrameComplement[0:featureLength-1]
+
+                    #Find Matches
+                    firstFrameMatchesCircular = re.finditer(featureSeq, firstReadingFrameCircular)
+                    secondFrameMatchesCircular = re.finditer(featureSeq, secondReadingFrameCircular)
+                    thirdFrameMatchesCircular = re.finditer(featureSeq, thirdReadingFrameCircular)
+
+                    firstFrameComplementMatchesCircular = re.finditer(featureSeq, firstReadingFrameComplementCircular)
+                    secondFrameComplementMatchesCircular = re.finditer(featureSeq, secondReadingFrameComplementCircular)
+                    thirdFrameComplementMatchesCircular = re.finditer(featureSeq, thirdReadingFrameComplementCircular)
+
+                    for m in firstFrameMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + \
+                                  str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + \
+                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+
+                    for m in secondFrameMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + \
+                                  str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + \
+                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
+
+                    for m in thirdFrameMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + \
+                                  str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + \
+                                  str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
 
 
-                    for m in firstFrameMatches:
-                        print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
 
-                    for m in secondFrameMatches:
-                        print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
-                    for m in thirdFrameMatches:
-                        print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+                    for m in firstFrameComplementMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
 
+                    for m in secondFrameComplementMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
 
-                    for m in firstFrameComplementMatches:
-                        print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
-                    for m in secondFrameComplementMatches:
-                        print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
-                    for m in thirdFrameComplementMatches:
-                        print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
-
+                    for m in thirdFrameComplementMatchesCircular:
+                        if m.end() <= seqLength:
+                            print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(m.end()) + " in record: " + str(record.id)
+                        else:
+                            print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + \
+                                  ".." + str(seqLength) + " Join " + "1.." + str(seqLength) + seqLength - m.end()
 
             if(feature == "PBS"):
                 for variation in featureStatistic_container[feature]:

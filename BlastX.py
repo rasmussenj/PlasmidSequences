@@ -6,9 +6,7 @@ from Bio.Blast import NCBIWWW
 records = list(SeqIO.parse("vectors.gb", "genbank"))
 seq = records[2].seq
 
-
 qblast_output = NCBIWWW.qblast("blastx", "refseq_protein", seq)
-
 
 text = qblast_output.read()
 
