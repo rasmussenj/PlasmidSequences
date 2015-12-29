@@ -1,9 +1,12 @@
 import math
 import collections
+from Bio import SeqIO
+from feature import FeatureStatistic
 
-class Statistic:
+
+class FeatureDic:
     def __init__(self, featureContainer):
-        self.featureContainer = featureContainer
+        self.featureDictionary = featureContainer
         self.removeSpuriousCommonFeatures()
         self.removeSpuriousAnnotations()
         self.removeMultipleQulification()
@@ -11,34 +14,32 @@ class Statistic:
 
     def removeSpuriousCommonFeatures(self): # remove feature less then 3
         keysToRemove = []
-        for key in self.featureContainer:
+        for key in self.featureDictionary:
             variationSum = 0
-            for variation in self.featureContainer[key]:
+            for variation in self.featureDictionary[key]:
                 variationSum += variation.count
             if variationSum < 3:
                 keysToRemove.append(key)
         for key in keysToRemove:
-            del self.featureContainer[key]
+            del self.featureDictionary[key]
 
     def get_most_commom(self, qulification):
         counter=collections.Counter(qulification)
         return counter.most_common(1)[0][0]
 
-
-
     def removeSpuriousAnnotations(self):
-        for key in self.featureContainer:
+        for key in self.featureDictionary:
             variationSum = 0
-            for variation in self.featureContainer[key]:
+            for variation in self.featureDictionary[key]:
                 variationSum += variation.count
-            for variation in self.featureContainer[key]:
+            for variation in self.featureDictionary[key]:
                 present_in_percent = variation.count / variationSum * 100
                 if present_in_percent > 5:
-                    self.featureContainer[key].remove(variation)
+                    self.featureDictionary[key].remove(variation)
 
     def removeMultipleQulification(self):
-        for key in self.featureContainer:
-            for variation in self.featureContainer[key]:
+        for key in self.featureDictionary:
+            for variation in self.featureDictionary[key]:
                 variation.note = self.get_most_commom(variation.note)
                 variation.gene = self.get_most_commom(variation.gene)
                 variation.bound_moiety = self.get_most_commom(variation.bound_moiety)
@@ -46,7 +47,7 @@ class Statistic:
                 variation.product = self.get_most_commom(variation.product)
 
     def showStaistic(self):
-        for f in self.featureContainer:
+        for f in self.featureDictionary:
             print("+---------------------------------------------------------")
             print("| %s " % f.name)
             print("| %-20s %-20s %10s %50s %50s %50s %50s %50s"%
@@ -64,7 +65,7 @@ class Statistic:
         log_file.write(" %s \t %s \t %s \t %s  \t %s \t %s \t %s \t %s \t %s \n"%
                        ("feature", "count", "seq Start","percent", "note", "Gene",
                         "Product", "bound_moiety", "mobile"))
-        for f in self.featureContainer:
+        for f in self.featureDictionary:
 
             log_file.write("\n\n %s \n" % f.name)
             for variation_f in f.varationList:
@@ -81,3 +82,13 @@ class Statistic:
                     variation_f.mobile))
 
         log_file.close()
+
+    def appendPrimer(self, path, form):
+        primerVariationList = []
+        for record in SeqIO.parse(path, form):
+            primerVariation = FeatureStatistic.Varation(record.seq, 1)
+
+            primerVariation.note = record.description
+            primerVariationList.append(primerVariation)
+
+        self.featureDictionary["PBS"] = primerVariationList

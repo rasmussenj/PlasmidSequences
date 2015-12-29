@@ -133,3 +133,6 @@ def countFeatures(feature, seq):
 def appendQualifier(qualifier, value):
     if value is not None:
         qualifier.append(value)
+
+
+

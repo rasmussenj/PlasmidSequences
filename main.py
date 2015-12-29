@@ -1,5 +1,7 @@
+import re
+from Bio.Seq import reverse_complement, translate
 from load import *
-from statistic import *
+from featuredic import *
 from Bio import SeqIO
 from Bio import SeqUtils
 from Bio.SeqRecord import SeqRecord
@@ -11,37 +13,11 @@ import pickle
 file_Name = "featureObjects"
 
 def generate():
-    featureStatistic_container = getFeature()
-    # for key in featureStatistic_container:
-    #     print key, "---------------------------------new feature"
-    #     for variation in featureStatistic_container[key]:
-    #         if variation.count > 0 and key == 'CDS':
-    #             print "-------------new variation -----------"
-    #             print "count", variation.count
-    #             print "note", variation.note
-    #             print "gene", variation.gene
-    #             print "bound_moiety", variation.bound_moiety
-    #             print "mobile", variation.mobile
-    #             print "product", variation.product
+    features_Container = getFeature()
+    featureDictionary = FeatureDic(features_Container)
+    featureDictionary.appendPrimer("common_primer.mfasta", "fasta")
 
-    featureStatistic_container = Statistic(featureStatistic_container).featureContainer
-
-    # print "----------------------------------------------------------------- after staticstis ----------------------------"
-    #
-    # for key in featureStatistic_container:
-    #     print key, "---------------------------------new feature"
-    #     for variation in featureStatistic_container[key]:
-    #         if variation.count > 0 and key == 'CDS':
-    #             print "-------------new variation -----------"
-    #             print "seq", variation.seq
-    #             print "count", variation.count
-    #             print "note", variation.note
-    #             print "gene", variation.gene
-    #             print "bound_moiety", variation.bound_moiety
-    #             print "mobile", variation.mobile
-    #             print "product", variation.product
-
-    return featureStatistic_container
+    return featureDictionary.featureDictionary
 
 def write(featureStatistic_container):
     # open the file for writing
@@ -57,11 +33,8 @@ def read():
 
 if __name__ == "__main__":
     featureStatistic_container = generate()
-    featureStatistic_container
-    # write(featureStatistic_container)
-    featureStatistic_container
-    # record = SeqIO.read("nanobody.fasta", "fasta")
-    record = SeqIO.read("vectors-1.gb", "genbank")
+
+    record = SeqIO.read("EcoliK12.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -73,41 +46,93 @@ if __name__ == "__main__":
     recordSeq = str(record.seq)
 
     for feature in featureStatistic_container:
-        for variation in featureStatistic_container[feature]:
+        if feature != "PBS":
+            for variation in featureStatistic_container[feature]:
+                featureSeq = str(variation.seq)
+                occurrence = SeqUtils.nt_search(recordSeq, featureSeq)
+                if (len(occurrence) > 1):
+                    for i in range(1,len(occurrence)):
+                        newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=1), type=str(feature))
+                        if variation.product != None:
+                            newFeature.qualifiers['product'] = variation.product
+                        if variation.gene != None:
+                            newFeature.qualifiers['gene'] = variation.gene
+                        if variation.bound_moiety != None:
+                            newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
+                        if variation.mobile != None:
+                            newFeature.qualifiers['mobile'] = variation.mobile
+                        if variation.note != None:
+                            newFeature.qualifiers['note'] = variation.note
+                        newRecord.features.append(newFeature)
 
-            featureSeq = str(variation.seq)
-            occurrence = SeqUtils.nt_search(recordSeq, featureSeq)
-            if (len(occurrence) > 1):
-                for i in range(1,len(occurrence)):
-                    newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=1), type=str(feature))
-                    if variation.product != None:
-                        newFeature.qualifiers['product'] = variation.product
-                    if variation.gene != None:
-                        newFeature.qualifiers['gene'] = variation.gene
-                    if variation.bound_moiety != None:
-                        newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
-                    if variation.mobile != None:
-                        newFeature.qualifiers['mobile'] = variation.mobile
-                    if variation.note != None:
-                        newFeature.qualifiers['note'] = variation.note
-                    newRecord.features.append(newFeature)
+                featureSeqComplement = str(variation.seq.complement())
+                occurrenceComplement = SeqUtils.nt_search(recordSeq, featureSeqComplement)
+                if (len(occurrenceComplement) > 1):
+                    for i in range(1, len(occurrenceComplement)):
+                        newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature))
+                        if variation.product != None:
+                            newFeature.qualifiers['product'] = variation.product
+                        if variation.gene != None:
+                            newFeature.qualifiers['gene'] = variation.gene
+                        if variation.bound_moiety != None:
+                            newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
+                        if variation.mobile != None:
+                            newFeature.qualifiers['mobile'] = variation.mobile
+                        if variation.note != None:
+                            newFeature.qualifiers['note'] = variation.note
+                        newRecord.features.append(newFeature)
+        else:
 
-            featureSeqComplement = str(variation.seq.complement())
-            occurrenceComplement = SeqUtils.nt_search(recordSeq, featureSeqComplement)
-            if (len(occurrenceComplement) > 1):
-                for i in range(1, len(occurrenceComplement)):
-                    newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature))
-                    if variation.product != None:
-                        newFeature.qualifiers['product'] = variation.product
-                    if variation.gene != None:
-                        newFeature.qualifiers['gene'] = variation.gene
-                    if variation.bound_moiety != None:
-                        newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
-                    if variation.mobile != None:
-                        newFeature.qualifiers['mobile'] = variation.mobile
-                    if variation.note != None:
-                        newFeature.qualifiers['note'] = variation.note
-                    newRecord.features.append(newFeature)
+                difference = len(record.seq) % 3
+
+                if difference != 0:
+                    seqRecordToCheck = str(record.seq)[:-difference]
+                else:
+                    seqRecordToCheck = str(record.seq)
+
+                seqRecordToCheckComplement = str(reverse_complement(seqRecordToCheck))
+
+                #Reading Frames
+                firstReadingFrame = translate(seqRecordToCheck)
+                secondReadingFrame = translate(seqRecordToCheck[1::] + seqRecordToCheck[0])
+                thirdReadingFrame = translate(seqRecordToCheck[2::] + seqRecordToCheck[0:2])
+
+                #Reading Frames (reverseComplement)
+                firstReadingFrameComplement = translate(seqRecordToCheckComplement)
+                secondReadingFrameComplement = translate(seqRecordToCheckComplement[1::] + seqRecordToCheckComplement[0])
+                thirdReadingFrameComplement = translate(seqRecordToCheckComplement[2::] + seqRecordToCheckComplement[0:2])
+
+                for variation in featureStatistic_container[feature]:
+                    featureName = variation.note
+                    featureSeq = str(variation.seq)
+
+
+                    firstFrameMatches = re.finditer(featureSeq, firstReadingFrame)
+                    secondFrameMatches = re.finditer(featureSeq, secondReadingFrame)
+                    thirdFrameMatches = re.finditer(featureSeq, thirdReadingFrame)
+
+                    firstFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
+                    secondFrameComplementMatches = re.finditer(featureSeq, secondReadingFrameComplement)
+                    thirdFrameComplementMatches = re.finditer(featureSeq, thirdReadingFrameComplement)
+                    print(firstFrameMatches)
+                    for m in firstFrameMatches:
+                        print(m)
+
+                    for m in firstFrameMatches:
+                        print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+                    for m in secondFrameMatches:
+                        print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+                    for m in thirdFrameMatches:
+                        print featureName + " Matches in third reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+
+
+                    for m in firstFrameComplementMatches:
+                        print featureName + " Matches in first reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+                    for m in secondFrameComplementMatches:
+                        print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+                    for m in thirdFrameComplementMatches:
+                        print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+
 
 
     output_handle = open("outbput.gb", "w")
