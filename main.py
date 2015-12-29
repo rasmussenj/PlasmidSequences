@@ -1,5 +1,8 @@
+from Bio.Seq import reverse_complement
+
 from load import *
 from statistic import *
+from feature import Variation
 from Bio import SeqIO
 from Bio import SeqUtils
 from Bio.SeqRecord import SeqRecord
@@ -30,9 +33,11 @@ def read():
     return pickle.load(fileObject)
 
 if __name__ == "__main__":
-    featureStatistic_container = generate()
-
-    record = SeqIO.read("EcoliK12.gb", "genbank")
+    #featureStatistic_container = generate()
+    #write(featureStatistic_container)
+    featureStatistic_container = read()
+    # record = SeqIO.read("nanobody.fasta", "fasta")
+    record = SeqIO.read("vectors-1.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header

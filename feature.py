@@ -3,16 +3,16 @@ class FeatureStatistic:
         self.variationList = []
         self.name = name
 
-    class Variation:
-        def __init__(self, seq, count):
-            self.seq = seq
-            self.count = count
-            self.present_in_percent = None
-            self.product = []
-            self.gene = []
-            self.bound_moiety = []
-            self.mobile = []
-            self.note = []
+class Variation:
+    def __init__(self, seq, count):
+        self.seq = seq
+        self.count = count
+        self.present_in_percent = None
+        self.product = []
+        self.gene = []
+        self.bound_moiety = []
+        self.mobile = []
+        self.note = []
 
 class Feature:
     def __init__(self, seq, name, count):

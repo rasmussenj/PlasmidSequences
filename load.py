@@ -121,7 +121,7 @@ def countFeatures(feature, seq):
 
         # if seq not found in statFeature, create a new variation of the feature
         if not seq_in_list:
-            new_variation = FeatureStatistic.Variation(seq, 1)
+            new_variation = Variation(seq, 1)
             new_variation.note.append(note)
             new_variation.bound_moiety.append(bound_moiety)
             new_variation.gene.append(gene)
