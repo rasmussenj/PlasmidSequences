@@ -18,8 +18,8 @@ file_Name = "featureObjects"
 def generate():
     features_Container = getFeature()
     featureDictionary = FeatureDic(features_Container)
+    featureDictionary.appendSpecialTransFeature("tags_epitopes.mfasta", "fasta")
     featureDictionary.appendPrimer("common_primer.mfasta", "fasta")
-
     return featureDictionary.featureDictionary
 
 def write(featureStatistic_container):
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #write(featureStatistic_container)
     #featureStatistic_container = read()
     # record = SeqIO.read("nanobody.fasta", "fasta")
-    record = SeqIO.read("EcoliK12.gb", "genbank")
+    record = SeqIO.read("vectors-1.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     recordSeq = str(record.seq)
 
     for feature in featureStatistic_container:
-        if feature != "PBS":
+        if feature not in ["PBS", "STF"]:
             for variation in featureStatistic_container[feature]:
                 featureSeq = str(variation.seq)
                 occurrence = SeqUtils.nt_search(recordSeq, featureSeq)
@@ -87,6 +87,7 @@ if __name__ == "__main__":
                             newFeature.qualifiers['note'] = variation.note
                         newRecord.features.append(newFeature)
         else:
+            if(feature == "SFT"):
                 difference = len(record.seq) % 3
                 seqRecordToCheck = str(record.seq)
                 if difference != 0:
@@ -109,7 +110,6 @@ if __name__ == "__main__":
                 for variation in featureStatistic_container[feature]:
                     featureName = variation.note
                     featureSeq = str(variation.seq)
-                    print variation.seq
 
                     firstFrameMatches = re.finditer(featureSeq, firstReadingFrame)
                     secondFrameMatches = re.finditer(featureSeq, secondReadingFrame)
@@ -119,11 +119,10 @@ if __name__ == "__main__":
                     secondFrameComplementMatches = re.finditer(featureSeq, secondReadingFrameComplement)
                     thirdFrameComplementMatches = re.finditer(featureSeq, thirdReadingFrameComplement)
 
-                    for m in firstFrameMatches:
-                        print(m)
 
                     for m in firstFrameMatches:
                         print featureName + " Matches in first reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+
                     for m in secondFrameMatches:
                         print featureName + " Matches in second reading frame at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
                     for m in thirdFrameMatches:
@@ -136,6 +135,54 @@ if __name__ == "__main__":
                         print featureName + " Matches in second reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
                     for m in thirdFrameComplementMatches:
                         print featureName + " Matches in third reading frame COMPLEMENT at position " + str(m.start()) + ".." + str(m.end()) + " in record: " + str(record.id)
+
+
+            if(feature == "PBS"):
+                for variation in featureStatistic_container[feature]:
+                    primerSeq = str(variation.seq)
+                    primerName = variation.note
+
+                    partialPrimerSeq = primerSeq[len(primerSeq)-15::]
+                    seqRecordToCheck = str(record.seq)
+                    seqRecordToCheckComplement = str(reverse_complement(record.seq))
+
+
+                    matchingPrimerPositions = SeqUtils.nt_search(seqRecordToCheck, partialPrimerSeq)
+
+                    if (len(matchingPrimerPositions) > 1):
+                        difference = len(primerSeq) - len(partialPrimerSeq)
+                        length = len(matchingPrimerPositions)
+                        for j in range(1, length):
+                            if primerSeq == seqRecordToCheck[matchingPrimerPositions[j] -
+                                    difference : matchingPrimerPositions[j] - difference + len(primerSeq)]:
+                                print "Primer: " + primerName + " Complete Match at position: " + \
+                                      str(matchingPrimerPositions[j] - difference) + ".." + \
+                                      str(matchingPrimerPositions[j] - difference + len(primerSeq)) + \
+                                      " in record: " + str(record.id)
+                            else:
+                                print "Primer: " + primerName + " Partial Match at position: " + \
+                                      str(matchingPrimerPositions[j]) + ".." + \
+                                      str(matchingPrimerPositions[j] + len(partialPrimerSeq)) + \
+                                      " in record: " + str(record.id)
+
+
+                    matchingPrimerPositions = SeqUtils.nt_search(seqRecordToCheckComplement, partialPrimerSeq)
+
+                    if (len(matchingPrimerPositions) > 1):
+                        difference = len(primerSeq) - len(partialPrimerSeq)
+                        length = len(matchingPrimerPositions)
+                        for j in range(1, length):
+                            if primerSeq == seqRecordToCheckComplement[matchingPrimerPositions[j] -
+                                    difference : matchingPrimerPositions[j] - difference + len(primerSeq)]:
+                                print "Primer: " + primerName + " Complete Match on COMPLEMENT at position: " + \
+                                      str(matchingPrimerPositions[j] - difference) + ".." + \
+                                      str(matchingPrimerPositions[j] - difference + len(primerSeq)) + \
+                                      " in record: " + str(record.id)
+                            else:
+                                print "Primer: " + primerName + " Partial Match on COMPLEMENT at position: " + \
+                                      str(matchingPrimerPositions[j]) + ".." + \
+                                      str(matchingPrimerPositions[j] + len(partialPrimerSeq)) + \
+                                      " in record: " + str(record.id)
 
 
 

@@ -83,11 +83,21 @@ class FeatureDic:
 
         log_file.close()
 
-    def appendPrimer(self, path, form):
-        primerVariationList = []
+    def appendSpecialTransFeature(self, path, form):
+        specialTransVariationList = []
         for record in SeqIO.parse(path, form):
-            primerVariation = Variation(record.seq, 1)
+            specialVariation = Variation(record.seq, 1)
 
+            specialVariation.note = record.description
+            specialTransVariationList.append(specialVariation)
+
+        self.featureDictionary["STF"] = specialTransVariationList
+
+    def appendPrimer(self, paht, form):
+        primerVariationList = []
+        for record in SeqIO.parse(paht, form):
+            seq = str(record.seq).split("(")[0]
+            primerVariation = Variation(seq, 1)
             primerVariation.note = record.description
             primerVariationList.append(primerVariation)
 
