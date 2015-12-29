@@ -1,9 +1,10 @@
-from Bio.Seq import reverse_complement
+import re
+from Bio.Seq import reverse_complement, translate
 
 from load import *
-from statistic import *
+
 from featuredic import *
-from feature import Variation
+
 from Bio import SeqIO
 from Bio import SeqUtils
 from Bio.SeqRecord import SeqRecord
@@ -36,9 +37,9 @@ def read():
 if __name__ == "__main__":
     featureStatistic_container = generate()
     #write(featureStatistic_container)
-    featureStatistic_container = read()
+    #featureStatistic_container = read()
     # record = SeqIO.read("nanobody.fasta", "fasta")
-    record = SeqIO.read("vectors-1.gb", "genbank")
+    record = SeqIO.read("EcoliK12.gb", "genbank")
     newRecord = SeqRecord(record.seq)
 
     #writing Header
@@ -86,9 +87,8 @@ if __name__ == "__main__":
                             newFeature.qualifiers['note'] = variation.note
                         newRecord.features.append(newFeature)
         else:
-
                 difference = len(record.seq) % 3
-
+                seqRecordToCheck = str(record.seq)
                 if difference != 0:
                     seqRecordToCheck = str(record.seq)[:-difference]
                 else:
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                 for variation in featureStatistic_container[feature]:
                     featureName = variation.note
                     featureSeq = str(variation.seq)
-
+                    print variation.seq
 
                     firstFrameMatches = re.finditer(featureSeq, firstReadingFrame)
                     secondFrameMatches = re.finditer(featureSeq, secondReadingFrame)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                     firstFrameComplementMatches = re.finditer(featureSeq, firstReadingFrameComplement)
                     secondFrameComplementMatches = re.finditer(featureSeq, secondReadingFrameComplement)
                     thirdFrameComplementMatches = re.finditer(featureSeq, thirdReadingFrameComplement)
-                    print(firstFrameMatches)
+
                     for m in firstFrameMatches:
                         print(m)
 
