@@ -1,3 +1,5 @@
+from Bio.Seq import reverse_complement
+
 from load import *
 from statistic import *
 from Bio import SeqIO
@@ -92,7 +94,7 @@ if __name__ == "__main__":
                         newFeature.qualifiers['note'] = variation.note
                     newRecord.features.append(newFeature)
 
-            featureSeqComplement = str(variation.seq.complement())
+            featureSeqComplement = str(reverse_complement(variation.seq))
             occurrenceComplement = SeqUtils.nt_search(recordSeq, featureSeqComplement)
             if (len(occurrenceComplement) > 1):
                 for i in range(1, len(occurrenceComplement)):
