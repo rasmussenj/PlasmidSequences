@@ -1,4 +1,5 @@
 import re
+from Bio.Blast import NCBIWWW
 from Bio.Seq import reverse_complement, translate
 
 from load import *
@@ -28,12 +29,10 @@ def write(featureStatistic_container):
     pickle.dump(featureStatistic_container,fileObject)
     fileObject.close()
 
-
 def read():
     fileObject = open(file_Name,'r')
     # load the object from the file into var b
     return pickle.load(fileObject)
-
 
 def addFeatureSTF():
     if m.end() <= seqLength:
@@ -45,7 +44,6 @@ def addFeatureSTF():
         newFeature.qualifiers['note'] = featureName
         newRecord.features.append(newFeature)
 
-
 def addFeatureComplSTF():
     if m.end() <= seqLength:
         newFeature = SeqFeature(FeatureLocation(m.start(),m.end(), strand=-1), type=str(feature))
@@ -55,7 +53,6 @@ def addFeatureComplSTF():
         newFeature = SeqFeature(CompoundLocation([FeatureLocation(m.start(),seqLength, strand=-1), FeatureLocation(1, (seqLength - m.end()), strand=-1)]), type=str(feature))
         newFeature.qualifiers['note'] = featureName
         newRecord.features.append(newFeature)
-
 
 def writeSTF():
     global difference, seqRecordToCheck, seqRecordToCheckComplement, variation, featureName, featureSeq, seqLength, m
@@ -118,7 +115,6 @@ def writeSTF():
         for m in thirdFrameComplementMatchesCircular:
             addFeatureComplSTF()
 
-
 def writePBS():
     global variation, seqRecordToCheck, seqRecordToCheckComplement, difference, newFeature
     for variation in featureStatistic_container[feature]:
@@ -168,12 +164,13 @@ def writePBS():
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
 
-
 if __name__ == "__main__":
     featureStatistic_container = generate()
     write(featureStatistic_container)
     #featureStatistic_container = read()
     # record = SeqIO.read("nanobody.fasta", "fasta")
+
+    doBlast = True
     output_handle = open("outbput.gb", "w")
     records = list(SeqIO.parse("vectors.gb", "genbank"))
     for i in range(1,50):
@@ -231,5 +228,18 @@ if __name__ == "__main__":
                 if(feature == "PBS"):
                     writePBS()
 
+
+
+
         SeqIO.write(newRecord, output_handle, "genbank")
+
+
+        ## Do BLAST
+        if doBlast:
+            result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
+            blast_result = open("blst" +str(i)+ ".xml", "w")
+            blast_result.write(result_handle.read())
+            blast_result.close()
+            result_handle.close()
+
     output_handle.close()
