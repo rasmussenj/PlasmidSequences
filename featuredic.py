@@ -54,7 +54,7 @@ class FeatureDic:
                   ("count", "seq Start","percent", "note", "Gene", "Product",
                    "bound_moiety", "mobile"))
 
-            for variation_f in f.varationList:
+            for variation_f in f.variationList:
                 print("|%-20d %-20s %10d %% %50s %50s %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
                                                     variation_f.present_in_percent,
                                                     variation_f.note, variation_f.gene,
@@ -68,7 +68,7 @@ class FeatureDic:
         for f in self.featureDictionary:
 
             log_file.write("\n\n %s \n" % f.name)
-            for variation_f in f.varationList:
+            for variation_f in f.variationList:
 
                 log_file.write("%s \t  %s \t %d %% \t %s \t %s \t %s \t %s \t %s \t %s\n"% (
                     " ",

@@ -1,5 +1,4 @@
 import re
-
 from Bio import SeqIO
 from Bio.Seq import reverse_complement, translate
 
@@ -10,7 +9,6 @@ specialTranslatedFeatures = list(SeqIO.parse("tags_epitopes.mfasta", "fasta"))
 for x in range(len(records)):
 
     difference = len(records[x].seq) % 3
-
     if difference != 0:
         seqRecordToCheck = str(records[x].seq)[:-difference]
     else: seqRecordToCheck = str(records[x].seq)

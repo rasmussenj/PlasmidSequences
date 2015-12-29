@@ -1,7 +1,5 @@
-import re
-from Bio.Seq import reverse_complement, translate
 from load import *
-from featuredic import *
+from statistic import *
 from Bio import SeqIO
 from Bio import SeqUtils
 from Bio.SeqRecord import SeqRecord
