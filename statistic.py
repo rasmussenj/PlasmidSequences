@@ -25,6 +25,7 @@ class Statistic:
         return counter.most_common(1)[0][0]
 
 
+
     def removeSpuriousAnnotations(self):
         for key in self.featureContainer:
             variationSum = 0
