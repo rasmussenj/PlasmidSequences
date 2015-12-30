@@ -1,5 +1,4 @@
 from Bio import SeqIO
-import itertools as it
 from feature import *
 
 only_note = ['promoter', 'oriT', 'rep_origin', 'primer_bind', 'terminator', 'misc_signal', 'misc_recomb', 'LTR', 'enhancer']
@@ -12,24 +11,25 @@ only_product = ['tRNA', 'rRNA']
 
 features_to_check_list = [only_note, note_and_gene, gene_and_product,
                           note_and_bound_moiety, note_and_mobile, only_gene, only_product]
-features_Container = {}
-# fill the features_Container with all features as FeatureStatistic object
+features_Dict_Container = {}
+# fill the features dictonary with the keys form features_to_check_list
 for features_to_check in features_to_check_list:
     for f in features_to_check:
-        features_Container[f] = []
+        features_Dict_Container[f] = []
 
 
 ################################# Functions ######################################
 
-def getFeature():
-    handle = open("vectors-100.gb", "rU")
+def getFeature(file):
+    print("Load annotations from " + file)
+    handle = open(file, "rU")
     for record in SeqIO.parse(handle, "genbank") :
         if len(record.seq) > 1500:
             for f in record.features:
                 for list in features_to_check_list:
                     if f.type in list and testSeqLength(f.location.start, f.location.end):
                         countFeatures(f, record.seq[f.location.start:f.location.end])
-    return features_Container
+    return features_Dict_Container
 
 
 def testSeqLength(start, end):
@@ -42,7 +42,7 @@ def testSeqLength(start, end):
 def countFeatures(feature, seq):
         # get the FeatureStatistic object which corresponds with the actual feature
 
-        accVariationList = features_Container[feature.type]
+        accVariationList = features_Dict_Container[feature.type]
         note = feature.qualifiers.get('note')[0] if feature.qualifiers.get('note') != None else None
         gene = feature.qualifiers.get('gene')[0] if feature.qualifiers.get('gene') != None else None
         bound_moiety = feature.qualifiers.get('bound_moiety')[0] if feature.qualifiers.get('bound_moiety') != None else None
@@ -121,7 +121,7 @@ def countFeatures(feature, seq):
 
         # if seq not found in statFeature, create a new variation of the feature
         if not seq_in_list:
-            new_variation = Variation(seq, 1)
+            new_variation = FeatureVariation(seq, 1)
             new_variation.note.append(note)
             new_variation.bound_moiety.append(bound_moiety)
             new_variation.gene.append(gene)

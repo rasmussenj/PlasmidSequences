@@ -4,7 +4,7 @@ from Bio.Seq import reverse_complement, translate
 
 from load import *
 
-from featuredic import *
+from featuresortdic import *
 
 from Bio import SeqIO
 from Bio import SeqUtils
@@ -14,25 +14,23 @@ from Bio.SeqFeature import *
 import pickle
 import random
 
-file_Name = "featureObjects"
+pickle_file_Name = "featureObjects"
 
 def generate():
-    features_Container = getFeature()
-    featureDictionary = FeatureDic(features_Container)
+    print("Loading vectors")
+    features_Container = getFeature("vectors.gb")
+    featureDictionary = FeatureSortDic(features_Container)
     featureDictionary.appendSpecialTransFeature("tags_epitopes.mfasta", "fasta")
     featureDictionary.appendPrimer("common_primer.mfasta", "fasta")
     return featureDictionary.featureDictionary
 
-def write(featureStatistic_container):
+def createPickle(featureStatistic_container):
     # open the file for writing
-    fileObject = open(file_Name,'wb')
+    fileObject = open(pickle_file_Name,'wb')
     pickle.dump(featureStatistic_container,fileObject)
     fileObject.close()
 
-def read():
-    fileObject = open(file_Name,'r')
-    # load the object from the file into var b
-    return pickle.load(fileObject)
+
 
 def addFeatureSTF():
     if m.end() <= seqLength:
@@ -164,25 +162,50 @@ def writePBS():
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
 
-if __name__ == "__main__":
-    featureStatistic_container = generate()
-    write(featureStatistic_container)
-    #featureStatistic_container = read()
-    # record = SeqIO.read("nanobody.fasta", "fasta")
+def writeFeature(strand):
+    global newFeature
+    if (len(occurrence) > 1):
+        for i in range(1, len(occurrence)):
+            newFeature = SeqFeature(FeatureLocation(occurrence[i], occurrence[i] + len(featureSeq), strand=strand),
+                                    type=str(feature))
+            if variation.product is not None:
+                newFeature.qualifiers['product'] = variation.product
+            if variation.gene is not None:
+                newFeature.qualifiers['gene'] = variation.gene
+            if variation.bound_moiety is not None:
+                newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
+            if variation.mobile is not None:
+                newFeature.qualifiers['mobile'] = variation.mobile
+            if variation.note is not None:
+                newFeature.qualifiers['note'] = variation.note
+            newRecord.features.append(newFeature)
 
-    doBlast = True
+
+if __name__ == "__main__":
+    try:
+        print("Trying to load pickle object feature dictionary")
+        featureStatistic_container = pickle.load(open(pickle_file_Name,'r'))
+        print("successfully loaded... ")
+    except IOError:
+        print("loading pickle faild")
+        featureStatistic_container = generate()
+        print("create pickle object")
+        createPickle(featureStatistic_container)
+
+    doBlast = False
+
     output_handle = open("outbput.gb", "w")
     records = list(SeqIO.parse("vectors.gb", "genbank"))
-    for i in range(1,50):
+    print("Annotate vectors")
+    for randomRec in range(1,2):
         record = records[random.randint(1, len(records))]
         newRecord = SeqRecord(record.seq)
 
         #writing Header
         newRecord.seq.alphabet = generic_dna
-        newRecord.id=record.id
+        newRecord.id = record.id
         newRecord.name = record.name
         newRecord.description = record.description
-
         recordSeq = str(record.seq)
 
         for feature in featureStatistic_container:
@@ -190,37 +213,11 @@ if __name__ == "__main__":
                 for variation in featureStatistic_container[feature]:
                     featureSeq = str(variation.seq)
                     occurrence = SeqUtils.nt_search(recordSeq, featureSeq)
-                    if (len(occurrence) > 1):
-                        for i in range(1,len(occurrence)):
-                            newFeature = SeqFeature(FeatureLocation(occurrence[i],occurrence[i]+len(featureSeq), strand=1), type=str(feature))
-                            if variation.product != None:
-                                newFeature.qualifiers['product'] = variation.product
-                            if variation.gene != None:
-                                newFeature.qualifiers['gene'] = variation.gene
-                            if variation.bound_moiety != None:
-                                newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
-                            if variation.mobile != None:
-                                newFeature.qualifiers['mobile'] = variation.mobile
-                            if variation.note != None:
-                                newFeature.qualifiers['note'] = variation.note
-                            newRecord.features.append(newFeature)
+                    writeFeature(strand=1)
 
                     featureSeqComplement = str(variation.seq.complement())
-                    occurrenceComplement = SeqUtils.nt_search(recordSeq, featureSeqComplement)
-                    if (len(occurrenceComplement) > 1):
-                        for i in range(1, len(occurrenceComplement)):
-                            newFeature = SeqFeature(FeatureLocation(occurrenceComplement[i],occurrenceComplement[i]+len(featureSeq), strand=-1), type=str(feature))
-                            if variation.product != None:
-                                newFeature.qualifiers['product'] = variation.product
-                            if variation.gene != None:
-                                newFeature.qualifiers['gene'] = variation.gene
-                            if variation.bound_moiety != None:
-                                newFeature.qualifiers['bound_moiety'] = variation.bound_moiety
-                            if variation.mobile != None:
-                                newFeature.qualifiers['mobile'] = variation.mobile
-                            if variation.note != None:
-                                newFeature.qualifiers['note'] = variation.note
-                            newRecord.features.append(newFeature)
+                    occurrence = SeqUtils.nt_search(recordSeq, featureSeqComplement)
+                    writeFeature(strand=-1)
             else:
                 if(feature == "STF"):
                     writeSTF()
@@ -228,18 +225,16 @@ if __name__ == "__main__":
                 if(feature == "PBS"):
                     writePBS()
 
-
-
-
         SeqIO.write(newRecord, output_handle, "genbank")
 
 
         ## Do BLAST
         if doBlast:
             result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
-            blast_result = open("blst" +str(i)+ ".xml", "w")
+            blast_result = open("blst" +str(randomRec)+ ".xml", "w")
             blast_result.write(result_handle.read())
             blast_result.close()
             result_handle.close()
 
     output_handle.close()
+    print("done")

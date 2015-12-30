@@ -1,16 +1,14 @@
-import math
 import collections
 from Bio import SeqIO
 from feature import *
 
 
-class FeatureDic:
+class FeatureSortDic:
     def __init__(self, featureContainer):
         self.featureDictionary = featureContainer
         self.removeSpuriousCommonFeatures()
         self.removeSpuriousAnnotations()
         self.removeMultipleQulification()
-        # self.showStaistic()
 
     def removeSpuriousCommonFeatures(self): # remove feature less then 3
         keysToRemove = []
@@ -46,47 +44,10 @@ class FeatureDic:
                 variation.mobile = self.get_most_commom(variation.mobile)
                 variation.product = self.get_most_commom(variation.product)
 
-    def showStaistic(self):
-        for f in self.featureDictionary:
-            print("+---------------------------------------------------------")
-            print("| %s " % f.name)
-            print("| %-20s %-20s %10s %50s %50s %50s %50s %50s"%
-                  ("count", "seq Start","percent", "note", "Gene", "Product",
-                   "bound_moiety", "mobile"))
-
-            for variation_f in f.variationList:
-                print("|%-20d %-20s %10d %% %50s %50s %50s %50s %50s"% (variation_f.count, variation_f.seq[:10],
-                                                    variation_f.present_in_percent,
-                                                    variation_f.note, variation_f.gene,
-                                                                  variation_f.product, variation_f.bound_moiety,
-                                                                  variation_f.mobile))
-
-        log_file = open("Log_Features_in_vector.txt", mode='w')
-        log_file.write(" %s \t %s \t %s \t %s  \t %s \t %s \t %s \t %s \t %s \n"%
-                       ("feature", "count", "seq Start","percent", "note", "Gene",
-                        "Product", "bound_moiety", "mobile"))
-        for f in self.featureDictionary:
-
-            log_file.write("\n\n %s \n" % f.name)
-            for variation_f in f.variationList:
-
-                log_file.write("%s \t  %s \t %d %% \t %s \t %s \t %s \t %s \t %s \t %s\n"% (
-                    " ",
-                    variation_f.count,
-                    variation_f.present_in_percent,
-                    variation_f.note,
-                    variation_f.gene,
-                    variation_f.product,
-                    variation_f.seq,
-                    variation_f.bound_moiety,
-                    variation_f.mobile))
-
-        log_file.close()
-
     def appendSpecialTransFeature(self, path, form):
         specialTransVariationList = []
         for record in SeqIO.parse(path, form):
-            specialVariation = Variation(record.seq, 1)
+            specialVariation = FeatureVariation(record.seq, 1)
 
             specialVariation.note = record.description
             specialTransVariationList.append(specialVariation)
@@ -97,7 +58,7 @@ class FeatureDic:
         primerVariationList = []
         for record in SeqIO.parse(paht, form):
             seq = str(record.seq).split("(")[0]
-            primerVariation = Variation(seq, 1)
+            primerVariation = FeatureVariation(seq, 1)
             primerVariation.note = record.description
             primerVariationList.append(primerVariation)
 
