@@ -230,7 +230,7 @@ if __name__ == "__main__":
 
         ## Do BLAST
         if doBlast:
-            result_handle = NCBIWWW.qblast("blastn", "nt", record.seq)
+            result_handle = NCBIWWW.qblast("blastx", "refseq_protein", record.seq)
             blast_result = open("blst" +str(randomRec)+ ".xml", "w")
             blast_result.write(result_handle.read())
             blast_result.close()
