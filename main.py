@@ -131,15 +131,15 @@ def writePBS():
             for j in range(1, length):
                 if primerSeq == seqRecordToCheck[matchingPrimerPositions[j] -
                         difference: matchingPrimerPositions[j] - difference + len(primerSeq)]:
-                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j] - difference,
-                                                            matchingPrimerPositions[j] - difference + len(primerSeq),
+                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j],
+                                                            matchingPrimerPositions[j] + len(primerSeq),
                                                             strand=1), type=str(feature))
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
 
                 else:
-                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j] - difference, AfterPosition(
-                        matchingPrimerPositions[j] - difference + len(primerSeq)), strand=1), type=str(feature))
+                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j], AfterPosition(
+                        matchingPrimerPositions[j] + len(primerSeq)), strand=1), type=str(feature))
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
 
@@ -151,14 +151,14 @@ def writePBS():
             for j in range(1, length):
                 if primerSeq == seqRecordToCheckComplement[matchingPrimerPositions[j] -
                         difference: matchingPrimerPositions[j] - difference + len(primerSeq)]:
-                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j] - difference,
-                                                            matchingPrimerPositions[j] - difference + len(primerSeq),
+                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j],
+                                                            matchingPrimerPositions[j] + len(primerSeq),
                                                             strand=-1), type=str(feature))
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
                 else:
-                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j] - difference, AfterPosition(
-                        matchingPrimerPositions[j] - difference + len(primerSeq)), strand=-1), type=str(feature))
+                    newFeature = SeqFeature(FeatureLocation(matchingPrimerPositions[j], AfterPosition(
+                        matchingPrimerPositions[j] + len(primerSeq)), strand=-1), type=str(feature))
                     newFeature.qualifiers['note'] = primerName
                     newRecord.features.append(newFeature)
 
