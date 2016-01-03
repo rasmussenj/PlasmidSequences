@@ -4,8 +4,8 @@ from feature import *
 
 
 class FeatureSortDic:
-    def __init__(self, featureContainer):
-        self.featureDictionary = featureContainer
+    def __init__(self, featureDicContainer):
+        self.featureDictionary = featureDicContainer
         self.removeSpuriousCommonFeatures()
         self.removeSpuriousAnnotations()
         self.removeMultipleQulification()

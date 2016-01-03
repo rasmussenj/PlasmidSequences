@@ -40,8 +40,6 @@ def testSeqLength(start, end):
 
 
 def countFeatures(feature, seq):
-        # get the FeatureStatistic object which corresponds with the actual feature
-
         accVariationList = features_Dict_Container[feature.type]
         note = feature.qualifiers.get('note')[0] if feature.qualifiers.get('note') != None else None
         gene = feature.qualifiers.get('gene')[0] if feature.qualifiers.get('gene') != None else None
